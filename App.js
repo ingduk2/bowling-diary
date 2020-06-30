@@ -1,5 +1,6 @@
 import React , {useState, useEffect} from 'react';
-import { Button, Text, View , Image, Linking, TextInput, ScrollView} from 'react-native';
+import { Button, Text, View , Image, Linking, TextInput, ScrollView, Dimensions,
+  Platform,} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,6 +12,10 @@ import MyCalendar from './MyCalendar';
 import WixCalendar from './WixCalendar';
 import { v1 as uuidv1 } from "uuid";
 import { seed } from "./uuidSeed";
+import ScoreList from './ScoreList';
+import Settings from './components/Settings';
+
+const { height, width } = Dimensions.get("window");
 
 function DetailsScreen() {
   return (
@@ -40,12 +45,49 @@ function _saveDate(date){
 
 
 function HomeScreen({ navigation }) {
+
+
+  const[datas, setData] = useState();
+
+  const saveData = () => {
+    const newData = Save();
+    const newDatas = {
+      ...datas,
+      ...newData
+    };
+    setData(newDatas);
+  }
+
   return (
     <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
+      <View>
       <ScrollView>
-      <Home saveScore={_saveScore}/>
+        <View style={{flexDirection: "row",   justifyContent: 'center', alignItems: "center",
+    // width: width / 2
+    }}>
+        
+        <Home saveScore={_saveScore}/>
+        <FontAwesome5 
+                name="bowling-ball" 
+                size={30} 
+                onPress={() => saveData() }
+                />
+        </View>
       <WixCalendar saveDate={_saveDate}/>
       </ScrollView>
+      </View>
+      <View style={{flex:1}}>
+        <ScrollView contentContainerStyle={{alignItems:'center'}}>
+          {Object.values(datas == null ? {} : datas).sort((a, b) =>
+            // a.date - b.date
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+          ).map(data => (
+            <ScoreList
+              key = {data.id}
+              {...data}/>
+          ))}    
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -54,10 +96,19 @@ function SettingsScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Settings screen</Text>
+      <Settings/>
       <Button
         title="Go to Details"
         onPress={() => navigation.navigate('Details')}
       />
+    </View>
+  );
+}
+
+function StatsScreen(){
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings screen</Text>
     </View>
   );
 }
@@ -72,7 +123,24 @@ function Save() {
   //  date
   //  score
   
+  const newDataObject = {
+    [ID]: {
+      id: ID,
+      score: _score,
+      date: _date,
+      createdAt: Date.now()
+    }
+  };
 
+  console.log(newDataObject);
+  // saveData(newDataObject);
+
+  //데이터 저장.
+
+  //calendar 찍기.
+
+  //리스트 로딩.
+  return newDataObject;
 }
 
 function HomeStackScreen() {
@@ -80,23 +148,23 @@ function HomeStackScreen() {
     <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={HomeScreen} options={{
             headerTitle: props => <LogoTitle {...props} />,
-            headerRight: () => (
-              <FontAwesome5 
-                name="bowling-ball" 
-                size={30} 
-                onPress={() => {
-                  Save()
-                }}
-                style={{paddingRight:10}}/>
+            // headerRight: () => (
+              // <FontAwesome5 
+              //   name="bowling-ball" 
+              //   size={30} 
+              //   onPress={() => {
+                  
+              //   }}
+              //   style={{paddingRight:30}}/>
                 
               
-            ),
+            // ),
             headerLeft: () => (
               <Feather 
                 name="phone-forwarded" 
                 size={30}
                 onPress={() => Linking.openURL('tel:01012341234')}
-                style={{paddingLeft:10}}
+                style={{paddingLeft:30}}
                 />
             ),
           }}/>
@@ -115,6 +183,14 @@ function SettingsStackScreen() {
     </SettingsStack.Navigator>
   );
 }
+function StatsStackScreen() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen name="Stats" component={StatsScreen} />
+      <SettingsStack.Screen name="Details" component={DetailsScreen} />
+    </SettingsStack.Navigator>
+  );
+}
 
 const Tab = createBottomTabNavigator();
 
@@ -129,8 +205,7 @@ function LogoTitle() {
 
 export default function App() {
 
-  const[score, setScore] = useState(0);
-  const[date, setDate] = useState("");
+  
   
   return (
     <NavigationContainer>
@@ -162,6 +237,7 @@ export default function App() {
         }}
       >
         <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home' }}/>
+        <Tab.Screen name="Stats" component={StatsStackScreen} options={{title: 'Stats'}}/>
         <Tab.Screen name="Settings" component={SettingsStackScreen} options={{ title: 'Settings' }}/>
       </Tab.Navigator>
     </NavigationContainer>
