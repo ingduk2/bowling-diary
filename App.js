@@ -1,25 +1,26 @@
 import React , {useState, useEffect} from 'react';
 import { Button, Text, View , Image, Linking, TextInput, ScrollView, Dimensions,
-  Platform,} from 'react-native';
+  Platform} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome5} from '@expo/vector-icons'; 
-import { Ionicons} from '@expo/vector-icons'; 
-import { Feather } from '@expo/vector-icons'; 
+import { FontAwesome5, Ionicons, Feather, AntDesign} from '@expo/vector-icons'; 
 import Home from './Home';
-import MyCalendar from './MyCalendar';
 import WixCalendar from './WixCalendar';
 import { v1 as uuidv1 } from "uuid";
 import { seed } from "./uuidSeed";
 import ScoreList from './ScoreList';
 import Settings from './components/Settings';
+import Stats from './components/Stats';
+import OpenSourceInfo from './components/OpenSourceInfo';
+import { Alert } from 'react-native';
+import { navigationRef } from './navi/RootNavigation';
 
 const { height, width } = Dimensions.get("window");
 
 function DetailsScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1 }}>
       <Text>Details!</Text>
     </View>
   );
@@ -47,9 +48,16 @@ function _saveDate(date){
 function HomeScreen({ navigation }) {
 
 
-  const[datas, setData] = useState();
+  const[datas, setData] = useState({});
 
   const saveData = () => {
+    //score
+    if( _score == null || _score =='' || _date == null){
+      Alert.alert("점수나 날짜를 확인해주세요");
+      return;
+    }
+    
+
     const newData = Save();
     const newDatas = {
       ...datas,
@@ -65,15 +73,12 @@ function HomeScreen({ navigation }) {
         <View style={{flexDirection: "row",   justifyContent: 'center', alignItems: "center",
     // width: width / 2
     }}>
-        
+        <FontAwesome5 name="bowling-ball" size={35} />
         <Home saveScore={_saveScore}/>
-        <FontAwesome5 
-                name="bowling-ball" 
-                size={30} 
-                onPress={() => saveData() }
-                />
+        <AntDesign name="enter" size={35} color="black" onPress={() => saveData() }/>
+        
         </View>
-      <WixCalendar saveDate={_saveDate}/>
+      <WixCalendar saveDate={_saveDate} datas={datas}/>
       </ScrollView>
       </View>
       <View style={{flex:1}}>
@@ -94,21 +99,17 @@ function HomeScreen({ navigation }) {
 
 function SettingsScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings screen</Text>
-      <Settings/>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
+    <View style={{  }}>
+      <Settings navigation={navigation}/>
+      {/* <Test/> */}
     </View>
   );
 }
 
 function StatsScreen(){
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings screen</Text>
+    <View style={{ flex: 1 , padding : 3 }}>
+      <Stats/>
     </View>
   );
 }
@@ -119,10 +120,6 @@ const HomeStack = createStackNavigator();
 function Save() {
   const ID = uuidv1({ random:seed()});
   console.log("Save", _score, _date, ID);
-  //key
-  //  date
-  //  score
-  
   const newDataObject = {
     [ID]: {
       id: ID,
@@ -133,13 +130,6 @@ function Save() {
   };
 
   console.log(newDataObject);
-  // saveData(newDataObject);
-
-  //데이터 저장.
-
-  //calendar 찍기.
-
-  //리스트 로딩.
   return newDataObject;
 }
 
@@ -148,27 +138,32 @@ function HomeStackScreen() {
     <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={HomeScreen} options={{
             headerTitle: props => <LogoTitle {...props} />,
-            // headerRight: () => (
-              // <FontAwesome5 
-              //   name="bowling-ball" 
-              //   size={30} 
-              //   onPress={() => {
-                  
-              //   }}
-              //   style={{paddingRight:30}}/>
-                
-              
-            // ),
+            headerRight: () => (
+              <AntDesign 
+                name="instagram" 
+                size={33} 
+                onPress={() => {
+                  let appUrl = 'instagram://user?username=gorilla_bowling_shop';
+                  let webUrl = 'https://www.instagram.com/gorilla_bowling_shop';
+                  Linking.canOpenURL(appUrl)
+                    .then((supported) => {
+                      Linking.openURL(supported ? appUrl : webUrl)
+                    }
+                    )
+                    .catch((err) => Alert.alert(err));
+                }}
+                style={{paddingRight:20}}/>
+            ),
             headerLeft: () => (
               <Feather 
                 name="phone-forwarded" 
-                size={30}
+                size={33}
                 onPress={() => Linking.openURL('tel:01012341234')}
-                style={{paddingLeft:30}}
+                style={{paddingLeft:20}}
                 />
             ),
           }}/>
-      <HomeStack.Screen name="Details" component={DetailsScreen} />
+      {/* <HomeStack.Screen name="Details" component={DetailsScreen} /> */}
     </HomeStack.Navigator>
   );
 }
@@ -180,6 +175,7 @@ function SettingsStackScreen() {
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={SettingsScreen} />
       <SettingsStack.Screen name="Details" component={DetailsScreen} />
+      <SettingsStack.Screen name="OpenSourceInfo" component={OpenSourceInfo} />
     </SettingsStack.Navigator>
   );
 }
@@ -187,7 +183,7 @@ function StatsStackScreen() {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Stats" component={StatsScreen} />
-      <SettingsStack.Screen name="Details" component={DetailsScreen} />
+      {/* <SettingsStack.Screen name="Details" component={DetailsScreen} /> */}
     </SettingsStack.Navigator>
   );
 }
@@ -204,19 +200,14 @@ function LogoTitle() {
 }
 
 export default function App() {
-
-  
-  
   return (
-    <NavigationContainer>
+    <NavigationContainer ref = {navigationRef}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             let iconTag;
             if (route.name === 'Home') {
-              // iconName = focused ? 'md-home' : 'md-home';
-              
               iconTag = focused ? 
               <Ionicons name='md-home' size={40} color={color} /> :
               <Ionicons name="md-home" size={40} color={color} /> ;
@@ -224,10 +215,9 @@ export default function App() {
             } else if (route.name === 'Settings') {
               // iconName = focused ? 'ios-list-box' : 'ios-list';
               iconTag = <Ionicons name='ios-list' size={40} color={color} />
+            } else if (route.name == 'Stats'){
+              iconTag = <Ionicons name="md-stats" size={40} color={color} />
             }
-
-            // You can return any component that you like here!
-            // return <Ionicons name={iconName} size={40} color={color} />;
             return iconTag;
           },
         })}

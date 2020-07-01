@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View ,TextInput} from 'react-native';
+import { StyleSheet, Text, View ,TextInput, Alert} from 'react-native';
 
 export default class Home extends React.Component{
 

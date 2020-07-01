@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, Text, View ,Dimensions,TextInput} from 'react-native';
-
+import { StyleSheet, Text, View ,Dimensions,TextInput, TouchableOpacity} from 'react-native';
+import { Entypo } from '@expo/vector-icons'; 
 const { width, height } = Dimensions.get("window");
 
 export default function ScoreList(props){
@@ -12,7 +12,19 @@ export default function ScoreList(props){
     return (
         <View style={styles.container}>
             <View style={styles.column}>
+            <Entypo style={styles.dot} name="dot-single" size={24} color="black" />
                 <Text style={styles.text}>{props.date} ( {props.score} 점) </Text>
+                <View style={styles.actions}>
+                <TouchableOpacity
+              onPressOut={event => {
+               
+              }}
+            >
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>❌</Text>
+              </View>
+            </TouchableOpacity>
+            </View>
             </View>
         </View>
     );
@@ -20,6 +32,9 @@ export default function ScoreList(props){
 
 
 const styles = StyleSheet.create({
+    dot : {
+      marginRight : 20
+    },
     container: {
       width: width - 50,
       borderBottomColor: "#bbb",
@@ -44,7 +59,8 @@ const styles = StyleSheet.create({
     text: {
       fontWeight: "600",
       fontSize: 20,
-      marginVertical: 20
+      marginVertical: 20,
+      width: width / 2,
     },
     completedText: {
       color: "#bbb",
@@ -56,7 +72,7 @@ const styles = StyleSheet.create({
     column: {
       flexDirection: "row",
       alignItems: "center",
-    //   width: width / 2
+      width: width / 2
     },
     actions: {
       flexDirection: "row"

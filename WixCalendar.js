@@ -13,14 +13,84 @@ LocaleConfig.locales['fr'] = {
 LocaleConfig.defaultLocale = 'fr';
 
 export default class WixCalendar extends Component {
-    state = {
-        selected:""
+    constructor(props){
+        super(props);
+        console.log("WixCalendar constructor");
     }
+
+    state = {
+        selected: '',
+        // saved: {
+        //     '2020-06-08': {
+        //         dots: [
+        //             {key: 'game', color: 'red', selectedDotColor: 'red'},
+        //         ]
+        //       }
+        // }
+    }
+    componentDidMount = () => {
+        console.log("WixCalendar componentDidMount");
+    };
+
 
     render() {
         console.log("WixCalendar render");
+        
         const {selected} = this.state;
-        const {saveDate} = this.props;
+        const {saveDate, datas} = this.props;
+        const clicked = {'selected': 'true', 'disableTouchEvent': true, 'selectedColor': '#00B7F4', 'selectedTextColor': 'white'};
+        const clickedDate = Object.assign({});
+        clickedDate[selected] = {
+            ...clicked
+        }
+        
+
+        let markedObject = {
+            ...clickedDate
+        }
+        console.log("-=================" , clickedDate);
+       
+        let saveDates = {};
+        Object.values(datas).map(data => {
+            const eachDate = Object.assign({});
+            const dots = {
+                dots :[
+                    {key: 'game' , color: 'red', selectedDotColor: 'red'},
+                ]
+            }
+            if (selected == data.date){
+                console.log("same date!!!!!!!!!!!!");
+                // 합쳐야함.
+                eachDate[data.date] = {
+                    ...clicked,
+                    ...dots
+                }
+            } else{
+                //그냥 dot 찍는다.
+                eachDate[data.date] = {
+                    ...dots
+                }
+            }
+            
+            saveDates = {
+                ...saveDates,
+                ...eachDate
+            }
+        })
+        console.log("==========================");
+        console.log(saveDates);
+        console.log("==========================");
+        
+
+        markedObject = {
+            ...markedObject,
+            ...saveDates,
+        }
+
+        console.log("============", markedObject);
+        
+       
+        
 
         return (
     <View style={{ paddingTop: 20, flex: 1 }}>
@@ -73,15 +143,15 @@ export default class WixCalendar extends Component {
         // // disableAllTouchEventsForDisabledDays={true}
         // // /** Replace default month and year title with custom one. the function receive a date as parameter. */
         // // //renderHeader={(date) => {/*Return JSX*/}}
-        markedDates={{
-            [selected]: {
-                selected: true,
-                disableTouchEvent: true,
-                selectedColor: '#3399ff',
-                selectedTextColor: 'white'
-              }
-          }}
-        
+        markingType={'multi-dot'}
+        // markedDates={{
+        //     // [selected]: {'selected': 'true', 'disableTouchEvent': true, 'selectedColor': 'black', 'selectedTextColor': 'white'} ,
+            
+        //     "2020-06-01":{"dots":[{"key":"vacation","color":"green","selectedDotColor":"red"},{"key":"massage","color":"red","selectedDotColor":"green"},{"key":"a","color":"red","selectedDotColor":"green"},{"key":"b","color":"red","selectedDotColor":"green"},{"key":"c","color":"red","selectedDotColor":"green"},{"key":"d","color":"red","selectedDotColor":"green"},{"key":"e","color":"red","selectedDotColor":"green"},{"key":"f","color":"red","selectedDotColor":"green"},{"key":"g","color":"red","selectedDotColor":"green"},{"key":"h","color":"red","selectedDotColor":"green"},{"key":"i","color":"red","selectedDotColor":"green"},{"key":"j","color":"red","selectedDotColor":"green"}]},
+        //     paramStr
+            
+        //   }}
+        markedDates={markedObject}
         />
       </View>
      )
