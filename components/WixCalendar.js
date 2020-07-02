@@ -48,7 +48,7 @@ export default class WixCalendar extends Component {
         let markedObject = {
             ...clickedDate
         }
-        console.log("-=================" , clickedDate);
+        // console.log("-=================" , clickedDate);
        
         let saveDates = {};
         Object.values(datas).map(data => {
@@ -77,9 +77,9 @@ export default class WixCalendar extends Component {
                 ...eachDate
             }
         })
-        console.log("==========================");
-        console.log(saveDates);
-        console.log("==========================");
+        // console.log("==========================");
+        // console.log(saveDates);
+        // console.log("==========================");
         
 
         markedObject = {
@@ -87,13 +87,13 @@ export default class WixCalendar extends Component {
             ...saveDates,
         }
 
-        console.log("============", markedObject);
+        // console.log("============", markedObject);
         
        
         
 
         return (
-    <View style={{ paddingTop: 20, flex: 1 }}>
+    <View style={{ paddingTop: 10, flex: 1 }}>
         <Calendar
         // // // Initially visible month. Default = Date()
         // current={'2020-06-07'}

@@ -11,7 +11,6 @@ import {
   } from "react-native-chart-kit";
 
 export default class Stats extends React.Component{
-
     constructor(props) {
         super(props);
         const elementButton = (value) => (
@@ -21,6 +20,9 @@ export default class Stats extends React.Component{
               </View>
             </TouchableOpacity>
           );
+
+       
+
         this.state = {
             tableHead: ['', 'low', 'high', 'avg'],
             tableTitle: ['1', '2', '3', '4'],
@@ -41,12 +43,35 @@ export default class Stats extends React.Component{
       render() {
         const state = this.state;
         const {data} = this.state;
+        const {datas} = this.props;
+        //월 별로 만들어야함.
+
+        let sumArr = [0,0,0,0,0,0,0,0,0,0,0,0];
+        let countArr = [0,0,0,0,0,0,0,0,0,0,0,0];
+        Object.values(datas).map(data => {
+          console.log(data.date, data.score);
+          let dateObject = new Date(data.date);
+          let year = dateObject.getFullYear();
+          let month = dateObject.getMonth();
+          let dayOfWeek = dateObject.getDay();
+          let dayOfMonth = dateObject.getDate();
+          //
+          countArr[Number(month)]++;
+          sumArr[Number(month)] += Number(data.score);
+        })
+
+        console.log(sumArr);
+        console.log(countArr);
+        
         //test
+        //setState 안해도 되는건가 원래..?
         for(let i = 0; i<data.length; i++){
-            data[i] = 30* i;
+            if(sumArr[i] != 0){
+              data[i] = sumArr[i]/countArr[i];
+            }
         }
         //test
-        console.log("======chart=======", data);
+        // console.log("======chart=======", data);
         return (
           <View style={styles.container}>
                <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom:10}}>

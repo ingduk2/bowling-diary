@@ -1,20 +1,22 @@
 import React , {useState, useEffect} from 'react';
 import { Button, Text, View , Image, Linking, TextInput, ScrollView, Dimensions,
-  Platform} from 'react-native';
+  Platform, AsyncStorage} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome5, Ionicons, Feather, AntDesign} from '@expo/vector-icons'; 
-import Home from './Home';
-import WixCalendar from './WixCalendar';
+import ScoreInput from './components/ScoreInput';
+import WixCalendar from './components/WixCalendar';
 import { v1 as uuidv1 } from "uuid";
-import { seed } from "./uuidSeed";
-import ScoreList from './ScoreList';
+import { seed } from "./uuid/uuidSeed";
+import ScoreList from './components/ScoreList';
 import Settings from './components/Settings';
 import Stats from './components/Stats';
 import OpenSourceInfo from './components/OpenSourceInfo';
 import { Alert } from 'react-native';
 import { navigationRef } from './navi/RootNavigation';
+import {AppLoading} from 'expo';
+import { Asset } from 'expo-asset';
 
 const { height, width } = Dimensions.get("window");
 
@@ -43,29 +45,89 @@ function _saveDate(date){
 }
 
 
+async function loadScoreDatas(){
+  let scoreDatas = {};
+  try {
+    const datas = await AsyncStorage.getItem("scoreDatas");
+    // console.log("datas", datas);
+    const parsedToDos = JSON.parse(datas);
+    // console.log("parsedToDos", parsedToDos);
+    if(parsedToDos == null){
+      scoreDatas = {};
+    } else{
+      scoreDatas = parsedToDos
+    }
+    // scoreDatas = (parsedToDos == null) ? {} : parsedToDos ;
+    //                  datas == null ? {} : datas
+    // console.log("scoreDatas" , scoreDatas);
+  } catch (err) {
+    console.log(err);
+  }
+  return scoreDatas;
+}
 
-
-function HomeScreen({ navigation }) {
-
+function HomeScreen() {
 
   const[datas, setData] = useState({});
 
-  const saveData = () => {
+  useEffect(() => {
+    
+      const fetchData = async () => {
+      const diskScoreDatas = await loadScoreDatas();
+      // console.log(articleData);
+      setData(diskScoreDatas)
+      }
+      
+      fetchData();
+  }, []);
+
+  const _addScoreData = () => {
     //score
+    console.log("_addScoreData" , _score, _date);
     if( _score == null || _score =='' || _date == null){
       Alert.alert("점수나 날짜를 확인해주세요");
       return;
     }
-    
 
+    
     const newData = Save();
     const newDatas = {
       ...datas,
       ...newData
     };
+
+    _score = "";
+    _date = "";
+    _saveScoreData(newDatas);
     setData(newDatas);
   }
 
+  const _deleteScoreData = (id) => {
+    
+    //id 로 data 지우고 setData 하면 될듯함.
+    delete datas[id];
+    const newDatas = {
+      ...datas
+    }
+    _saveScoreData(newDatas);
+    setData(newDatas);
+  }
+
+  const _updateScoreData = (id, score) => {
+    const newDatas = {
+      ...datas,
+      
+        [id]:{...datas[id], score: score}
+
+    }
+    _saveScoreData(newDatas);
+    setData(newDatas);
+  }
+
+  const _saveScoreData = (datas) => {
+    const saveScoreData = AsyncStorage.setItem("scoreDatas", JSON.stringify(datas));
+  };
+ 
   return (
     <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
       <View>
@@ -73,9 +135,9 @@ function HomeScreen({ navigation }) {
         <View style={{flexDirection: "row",   justifyContent: 'center', alignItems: "center",
     // width: width / 2
     }}>
-        <FontAwesome5 name="bowling-ball" size={35} />
-        <Home saveScore={_saveScore}/>
-        <AntDesign name="enter" size={35} color="black" onPress={() => saveData() }/>
+        {/* <FontAwesome5 name="bowling-ball" size={35} /> */}
+        <ScoreInput saveScore={_saveScore} addScoreData={_addScoreData}/>
+        {/* <AntDesign name="enter" size={35} color="black" onPress={() => _addScoreData() }/> */}
         
         </View>
       <WixCalendar saveDate={_saveDate} datas={datas}/>
@@ -89,6 +151,8 @@ function HomeScreen({ navigation }) {
           ).map(data => (
             <ScoreList
               key = {data.id}
+              deleteScoreData={_deleteScoreData}
+              updateScoreData={_updateScoreData}
               {...data}/>
           ))}    
         </ScrollView>
@@ -97,19 +161,34 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function SettingsScreen({ navigation }) {
+function SettingsScreen() {
   return (
     <View style={{  }}>
-      <Settings navigation={navigation}/>
+      <Settings/>
       {/* <Test/> */}
     </View>
   );
 }
 
 function StatsScreen(){
+  console.log("StatsScreen StatsScreen StatsScreen StatsScreen");
+  const[datas, setData] = useState({});
+
+  useEffect(() => {
+      console.log("StatsScreen.useEffect");
+      const fetchData = async () => {
+      const articleData = await loadScoreDatas();
+      // console.log(articleData);
+      setData(articleData)
+      }
+      
+      fetchData();
+  },[]);
+
+  
   return (
     <View style={{ flex: 1 , padding : 3 }}>
-      <Stats/>
+      <Stats datas = {datas}/>
     </View>
   );
 }
@@ -138,6 +217,9 @@ function HomeStackScreen() {
     <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={HomeScreen} options={{
             headerTitle: props => <LogoTitle {...props} />,
+            headerTitleStyles: {
+              paddingLeft : 20
+            },
             headerRight: () => (
               <AntDesign 
                 name="instagram" 
@@ -200,8 +282,23 @@ function LogoTitle() {
 }
 
 export default function App() {
-  return (
-    <NavigationContainer ref = {navigationRef}>
+  const [isReady , setIsReady] = useState(false);
+
+  const _cacheResourceAsync = async () => {
+    const images = [
+      require('./assets/gorilla.png'),
+      require('./assets/icon.png'),
+      require('./assets/splash.png')
+    ]
+    const cacheImages = images.map(image =>{
+      return Asset.fromModule(image).downloadAsync();
+    });
+    return Promise.all(cacheImages);
+  }
+
+  if (isReady){
+    return (
+      <NavigationContainer ref = {navigationRef}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -232,4 +329,15 @@ export default function App() {
       </Tab.Navigator>
     </NavigationContainer>
   );
+  } else {
+    return (
+      <AppLoading
+        startAsync={_cacheResourceAsync}
+        onFinish={() => setIsReady(true)}
+        onError={console.warn}
+      />
+    );  
+  }
+
+  
 }

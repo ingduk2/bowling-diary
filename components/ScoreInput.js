@@ -1,24 +1,27 @@
 import * as React from 'react';
-import { StyleSheet, Text, View ,TextInput, Alert} from 'react-native';
+import { StyleSheet, Text, View ,TextInput, Alert, Dimensions} from 'react-native';
+import { FontAwesome5, Ionicons, Feather, AntDesign} from '@expo/vector-icons'; 
+const { width, height } = Dimensions.get("window");
 
-export default class Home extends React.Component{
+export default class ScoreInput extends React.Component{
 
     state = {
-        score:"-"
+        score:""
     }
 
 
     render(){
-console.log("Home render");
+console.log("ScoreInput render");
 
         const { score } = this.state;
-        const { saveScore } = this.props;
+        const { saveScore , addScoreData} = this.props;
         return (
-            
             <View style={styles.container}>
+                <FontAwesome5 name="bowling-ball" size={35} />
                 {/* <MyCalendar/> */}
                 <TextInput
-                    value={score == "-" ? null : score}
+                    // value={score == "-" ? null : score}
+                    value ={score}
                     style={styles.input}
                     placeholder={"Score"}  
                     underlineColorAndroid={"transparent"}  
@@ -40,7 +43,13 @@ console.log("Home render");
                     }}
                     
                 />
-                
+                <AntDesign name="enter" size={35} color="black" 
+                    onPress={() => {
+                        this.setState({
+                            score:""
+                        });
+                        
+                        addScoreData() }}/>
             </View>
         );
     }
@@ -55,13 +64,16 @@ console.log("Home render");
 
 const styles = StyleSheet.create({
     container: {
+        flexDirection: "row",
          justifyContent: 'center', alignItems: 'center'
     },
     input:{
+        width : width / 4.5,
         borderColor: 'black',
         padding: 10,
         borderBottomColor: "#bbb",
         borderBottomWidth: 1,
-        fontSize: 25
+        fontSize: 25,
+        textAlign : 'center'
     }
   });
