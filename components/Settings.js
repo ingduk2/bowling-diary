@@ -18,13 +18,13 @@ const sections = [
     data: [
 
       {
-        title: 'Settings 1',
+        title: 'Home Setting',
         backgroundColor: RED,
         icon: 'forward',
         func : OpenSourceInfo
       },
       {
-        title: 'Settings 2',
+        title: 'Stats Setting',
         backgroundColor: ORANGE,
         icon: 'forward',
         // rightTitle: 'Off',
@@ -157,7 +157,7 @@ export default class Settings extends React.PureComponent {
 
   ListHeaderComponent = () => (
     <View>
-      
+      <Divider style={styles.separator} />
     </View>
   );
 

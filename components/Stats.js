@@ -24,13 +24,24 @@ export default class Stats extends React.Component{
        
 
         this.state = {
+
+
             tableHead: ['', 'low', 'high', 'avg'],
-            tableTitle: ['1', '2', '3', '4'],
+
+            fullTableTitle: [''],
+            fullTableData:[
+              ['0', '0', '0']
+            ],
+
+            tableTitle: ['3 게임', '6 게임', '9 게임', '-', '-', '-', '-'],
             tableData: [
               ['100', '200', '180'],
               ['100', '200', '180'],
               ['100', '200', '180'],
-              ['100', '200', '180'],
+              ['-', '-', '-'],
+              ['-', '-', '-'],
+              ['-', '-', '-'],
+              ['-', '-', '-'],
             ],
           data: [0,0,0,0,0,0,0,0,0,0,0,0]
         }
@@ -42,12 +53,27 @@ export default class Stats extends React.Component{
      
       render() {
         const state = this.state;
-        const {data} = this.state;
+        const {data, fullTableData, fullTableTitle} = this.state;
         const {datas} = this.props;
         //월 별로 만들어야함.
 
         let sumArr = [0,0,0,0,0,0,0,0,0,0,0,0];
         let countArr = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+
+        let fullStats = {
+          low : 301,
+          high: 0,
+          sum: 0,
+          cnt: 0,
+          ang: 0
+        }
+        // let low = 301;
+        // let high = 0;
+        // let sum = 0;
+        // let cnt = 0;
+        // let avg = 0;
+
         Object.values(datas).map(data => {
           console.log(data.date, data.score);
           let dateObject = new Date(data.date);
@@ -58,7 +84,25 @@ export default class Stats extends React.Component{
           //
           countArr[Number(month)]++;
           sumArr[Number(month)] += Number(data.score);
+          fullStats.low = Math.min(fullStats.low, Number(data.score));
+          fullStats.high = Math.max(fullStats.high, Number(data.score));
+          fullStats.sum += Number(data.score);
+          fullStats.cnt += 1;
         })
+
+        fullStats.avg = Math.round(fullStats.sum / fullStats.cnt);
+        console.log(fullStats);
+        let fullStatsArr = [];
+        fullStatsArr.push(fullStats.low); // low
+        fullStatsArr.push(fullStats.high); // high
+        fullStatsArr.push(fullStats.avg); // avg
+        
+        for (let i = 0; i<3; i++){
+          fullTableData[0][i] = fullStatsArr[i];
+        }
+        fullTableTitle[0] = fullStats.cnt + ' 게임';
+
+        
 
         console.log(sumArr);
         console.log(countArr);
@@ -74,8 +118,21 @@ export default class Stats extends React.Component{
         // console.log("======chart=======", data);
         return (
           <View style={styles.container}>
-               <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom:10}}>
-                <Text style={styles.text}>무슨 통계</Text>
+
+<View style={{justifyContent: 'center', alignItems: 'center', paddingBottom:10}}>
+                <Text style={styles.text}>전체 통계</Text>
+            </View>
+               <Table borderStyle={{borderWidth: 1}}>
+          <Row data={state.tableHead} flexArr={[1, 1, 1, 1]} style={styles.head} textStyle={styles.text}/>
+          <TableWrapper style={styles.wrapper}>
+            <Col data={state.fullTableTitle} style={styles.title} heightArr={[28,28]} textStyle={styles.text}/>
+            <Rows data={state.fullTableData} flexArr={[1, 1, 1]} style={styles.row} textStyle={styles.text}/>
+          </TableWrapper>
+        </Table>
+            
+
+               <View style={{justifyContent: 'center', alignItems: 'center', paddingTop : 10, paddingBottom:10}}>
+                <Text style={styles.text}>최근 통계</Text>
             </View>
                <Table borderStyle={{borderWidth: 1}}>
           <Row data={state.tableHead} flexArr={[1, 1, 1, 1]} style={styles.head} textStyle={styles.text}/>

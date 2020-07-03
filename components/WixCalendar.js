@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View} from 'react-native';
+import {View, Alert, Text} from 'react-native';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import {LocaleConfig} from 'react-native-calendars';
 
@@ -16,10 +16,11 @@ export default class WixCalendar extends Component {
     constructor(props){
         super(props);
         console.log("WixCalendar constructor");
+        
     }
 
     state = {
-        selected: '',
+        selected: this.props.nowDate,
         // saved: {
         //     '2020-06-08': {
         //         dots: [
@@ -95,6 +96,16 @@ export default class WixCalendar extends Component {
         return (
     <View style={{ paddingTop: 10, flex: 1 }}>
         <Calendar
+        // dayComponent={({date, state}) => {
+        //     return (
+        //       <View>
+        //         <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>
+        //           {date.day}
+        //         </Text>
+        //         <Text style={{color:'red'}}>1</Text>
+        //       </View>
+        //     );
+        //   }}
         // // // Initially visible month. Default = Date()
         // current={'2020-06-07'}
         // // // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined

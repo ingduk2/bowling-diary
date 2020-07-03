@@ -24,8 +24,11 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["instagram"]
+        "LSApplicationQueriesSchemes": [
+          "instagram"
+        ]
       }
-    }
+    },
+    "description": "Gorilla Bowling Diary"
   }
 }

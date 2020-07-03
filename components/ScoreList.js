@@ -113,17 +113,6 @@ export default function ScoreList(props){
         </View>
       </Modal>
 
-      {/* <TouchableHighlight
-        style={styles.openButton}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      >
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </TouchableHighlight> */}
-      {/* </View> */}
-
-
 
 
             <View style={styles.column}>
@@ -168,7 +157,7 @@ const styles = StyleSheet.create({
       marginRight : 20
     },
     container: {
-      width: width - 50,
+      width: width - 30,
       borderBottomColor: "#bbb",
       borderBottomWidth: StyleSheet.hairlineWidth,
       flexDirection: "row",
@@ -190,8 +179,8 @@ const styles = StyleSheet.create({
     },
     text: {
       fontWeight: "500",
-      fontSize: 19,
-      marginVertical: 19,
+      fontSize: 15,
+      marginVertical: 15,
       width: width / 2 + 40,
     },
     completedText: {

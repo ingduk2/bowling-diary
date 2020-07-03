@@ -51,12 +51,12 @@ export default class Stats extends React.Component{
                 <Text style={styles.text}>전체 통계</Text>
             </View>
             <View >
-            <Table borderStyle={{borderWidth: 0, borderColor: '#c8e1ff'}} style={{}}>
+            <Table borderStyle={{borderWidth: 1, borderColor: '#c8e1ff'}} style={{}}>
               <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
               <Rows data={state.tableData} textStyle={styles.text}/>
             </Table>
             </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{justifyContent: 'center', alignItems: 'center' , paddingTop:30}}>
   <Text>월간 차트</Text>
   <LineChart
     data={{
@@ -117,5 +117,5 @@ export default class Stats extends React.Component{
             backgroundColor: '#fff' ,
         },
         head: { height: 40, backgroundColor: '#f1f8ff' },
-        text: { margin: 6 , height: 40, alignContent:'center', alignItems:'center'},
+        text: { margin: 6 , height: 40, textAlign:'center'},
       });

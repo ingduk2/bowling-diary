@@ -4,7 +4,7 @@ import { Button, Text, View , Image, Linking, TextInput, ScrollView, Dimensions,
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome5, Ionicons, Feather, AntDesign} from '@expo/vector-icons'; 
+import { FontAwesome5, FontAwesome,  Ionicons, Feather, AntDesign} from '@expo/vector-icons'; 
 import ScoreInput from './components/ScoreInput';
 import WixCalendar from './components/WixCalendar';
 import { v1 as uuidv1 } from "uuid";
@@ -12,11 +12,15 @@ import { seed } from "./uuid/uuidSeed";
 import ScoreList from './components/ScoreList';
 import Settings from './components/Settings';
 import Stats from './components/Stats';
+import Memos from './components/Memos';
+
 import OpenSourceInfo from './components/OpenSourceInfo';
 import { Alert } from 'react-native';
 import { navigationRef } from './navi/RootNavigation';
 import {AppLoading} from 'expo';
 import { Asset } from 'expo-asset';
+// import {MemosStackScreen} from './na'
+
 
 const { height, width } = Dimensions.get("window");
 
@@ -70,6 +74,14 @@ function HomeScreen() {
 
   const[datas, setData] = useState({});
 
+  let nowDay = new Date();
+  let year = nowDay.getFullYear().toString();
+  let month = (nowDay.getMonth() + 1).toString();
+  let day = nowDay.getDate().toString();
+
+  const nowDate = year + '-' + (month.length == 1 ? '0' : '') + month + '-' + (day.length == 1 ? '0' : '') + day;
+  _saveDate(nowDate);
+  // Alert.alert(nowDate);
   useEffect(() => {
     
       const fetchData = async () => {
@@ -140,7 +152,7 @@ function HomeScreen() {
         {/* <AntDesign name="enter" size={35} color="black" onPress={() => _addScoreData() }/> */}
         
         </View>
-      <WixCalendar saveDate={_saveDate} datas={datas}/>
+      <WixCalendar saveDate={_saveDate} datas={datas} nowDate={nowDate}/>
       </ScrollView>
       </View>
       <View style={{flex:1}}>
@@ -163,7 +175,7 @@ function HomeScreen() {
 
 function SettingsScreen() {
   return (
-    <View style={{  }}>
+    <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
       <Settings/>
       {/* <Test/> */}
     </View>
@@ -189,6 +201,15 @@ function StatsScreen(){
   return (
     <View style={{ flex: 1 , padding : 3 }}>
       <Stats datas = {datas}/>
+    </View>
+  );
+}
+
+function MemosScreen(){
+  return (
+    <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
+      <Memos/>
+      {/* <Test/> */}
     </View>
   );
 }
@@ -270,6 +291,14 @@ function StatsStackScreen() {
   );
 }
 
+function MemosStackScreen(){
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen name="Memos" component={MemosScreen} />
+    </SettingsStack.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 
 function LogoTitle() {
@@ -314,6 +343,8 @@ export default function App() {
               iconTag = <Ionicons name='ios-list' size={40} color={color} />
             } else if (route.name == 'Stats'){
               iconTag = <Ionicons name="md-stats" size={40} color={color} />
+            } else if (route.name == 'Memos'){
+              iconTag = <FontAwesome name="sticky-note-o" size={40} color={color} />
             }
             return iconTag;
           },
@@ -325,6 +356,7 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home' }}/>
         <Tab.Screen name="Stats" component={StatsStackScreen} options={{title: 'Stats'}}/>
+        <Tab.Screen name="Memos" component={MemosStackScreen} options={{title: 'Memos'}}/>
         <Tab.Screen name="Settings" component={SettingsStackScreen} options={{ title: 'Settings' }}/>
       </Tab.Navigator>
     </NavigationContainer>
