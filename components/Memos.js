@@ -66,7 +66,7 @@ const sections = [
   { data: [] },
 ];
 
-export default class Settings extends React.PureComponent {
+export default class Memos extends React.PureComponent {
   renderItem = ({
     item: { title, subtitle, backgroundColor, icon, rightTitle,rightIcon, rightSubtitle, hideChevron, checkbox },
   }) => (
