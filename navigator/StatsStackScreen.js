@@ -5,6 +5,8 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Stats from '../components/Stats';
+import loadScoreDatas from './ScoreLoad';
+import { PrivateValueStore } from '@react-navigation/core';
 
 const StatsStack = createStackNavigator();
 
@@ -18,26 +20,26 @@ export function StatsStackScreen() {
 }
 
 
-async function loadScoreDatas() {
-    let scoreDatas = {};
-    try {
-        const datas = await AsyncStorage.getItem("scoreDatas");
-        // console.log("datas", datas);
-        const parsedToDos = JSON.parse(datas);
-        // console.log("parsedToDos", parsedToDos);
-        if (parsedToDos == null) {
-            scoreDatas = {};
-        } else {
-            scoreDatas = parsedToDos
-        }
-        // scoreDatas = (parsedToDos == null) ? {} : parsedToDos ;
-        //                  datas == null ? {} : datas
-        // console.log("scoreDatas" , scoreDatas);
-    } catch (err) {
-        console.log(err);
-    }
-    return scoreDatas;
-}
+// async function loadScoreDatas() {
+//     let scoreDatas = {};
+//     try {
+//         const datas = await AsyncStorage.getItem("scoreDatas");
+//         // console.log("datas", datas);
+//         const parsedToDos = JSON.parse(datas);
+//         // console.log("parsedToDos", parsedToDos);
+//         if (parsedToDos == null) {
+//             scoreDatas = {};
+//         } else {
+//             scoreDatas = parsedToDos
+//         }
+//         // scoreDatas = (parsedToDos == null) ? {} : parsedToDos ;
+//         //                  datas == null ? {} : datas
+//         // console.log("scoreDatas" , scoreDatas);
+//     } catch (err) {
+//         console.log(err);
+//     }
+//     return scoreDatas;
+// }
 
 function StatsScreen() {
     console.log("StatsScreen StatsScreen StatsScreen StatsScreen");
@@ -50,7 +52,6 @@ function StatsScreen() {
             // console.log(articleData);
             setData(articleData)
         }
-
         fetchData();
     }, []);
 

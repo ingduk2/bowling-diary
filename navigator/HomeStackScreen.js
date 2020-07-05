@@ -10,6 +10,7 @@ import WixCalendar from '../components/WixCalendar';
 import { v1 as uuidv1 } from "uuid";
 import { seed } from "../uuid/uuidSeed";
 import ScoreList from '../components/ScoreList';
+import loadScoreDatas from './ScoreLoad';
 
 
 
@@ -27,10 +28,40 @@ function LogoTitle() {
     );
 }
 
-export function HomeStackScreen() {
+export function HomeStackScreen(props) {
+    // Alert.alert(props);
+    console.log(props.route);
+
+    const createTwoButtonAlert = () =>
+    Alert.alert(
+      "인스타그램 이동",
+      "OK를 누르시면 고릴라볼링샵 인스타그램으로 이동합니다.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => {
+            console.log("OK Pressed") 
+            let appUrl = 'instagram://user?username=gorilla_bowling_shop';
+                            let webUrl = 'https://www.instagram.com/gorilla_bowling_shop';
+                            Linking.canOpenURL(appUrl)
+                                .then((supported) => {
+                                    Linking.openURL(supported ? appUrl : webUrl)
+                                }
+                                )
+                                .catch((err) => Alert.alert(err));
+        }
+        }
+      ],
+      { cancelable: false }
+    );
+
+    
     return (
         <HomeStack.Navigator>
-            <HomeStack.Screen name="Home" component={HomeScreen} options={{
+            <HomeStack.Screen name="Home"  component={HomeScreen} options={{
                 headerTitle: props => <LogoTitle {...props} />,
                 headerTitleStyles: {
                     paddingLeft: 20
@@ -39,16 +70,9 @@ export function HomeStackScreen() {
                     <AntDesign
                         name="instagram"
                         size={33}
-                        onPress={() => {
-                            let appUrl = 'instagram://user?username=gorilla_bowling_shop';
-                            let webUrl = 'https://www.instagram.com/gorilla_bowling_shop';
-                            Linking.canOpenURL(appUrl)
-                                .then((supported) => {
-                                    Linking.openURL(supported ? appUrl : webUrl)
-                                }
-                                )
-                                .catch((err) => Alert.alert(err));
-                        }}
+                        onPress={() => 
+                            createTwoButtonAlert()
+                        }
                         style={{ paddingRight: 20 }} />
                 ),
                 headerLeft: () => (
@@ -79,11 +103,6 @@ function HomeScreen() {
     const [_score , set_Score] = useState();
     const [_date, set_Date] = useState(nowDate);
 
-    
-
-    // _saveDate(nowDate);
-    // set_Date(nowDate);
-    // Alert.alert(nowDate);
     useEffect(() => {
 
         const fetchData = async () => {
@@ -212,23 +231,23 @@ function HomeScreen() {
 
 
 
-async function loadScoreDatas() {
-    let scoreDatas = {};
-    try {
-        const datas = await AsyncStorage.getItem("scoreDatas");
-        // console.log("datas", datas);
-        const parsedToDos = JSON.parse(datas);
-        // console.log("parsedToDos", parsedToDos);
-        if (parsedToDos == null) {
-            scoreDatas = {};
-        } else {
-            scoreDatas = parsedToDos
-        }
-        // scoreDatas = (parsedToDos == null) ? {} : parsedToDos ;
-        //                  datas == null ? {} : datas
-        // console.log("scoreDatas" , scoreDatas);
-    } catch (err) {
-        console.log(err);
-    }
-    return scoreDatas;
-}
+// async function loadScoreDatas() {
+//     let scoreDatas = {};
+//     try {
+//         const datas = await AsyncStorage.getItem("scoreDatas");
+//         // console.log("datas", datas);
+//         const parsedToDos = JSON.parse(datas);
+//         // console.log("parsedToDos", parsedToDos);
+//         if (parsedToDos == null) {
+//             scoreDatas = {};
+//         } else {
+//             scoreDatas = parsedToDos
+//         }
+//         // scoreDatas = (parsedToDos == null) ? {} : parsedToDos ;
+//         //                  datas == null ? {} : datas
+//         // console.log("scoreDatas" , scoreDatas);
+//     } catch (err) {
+//         console.log(err);
+//     }
+//     return scoreDatas;
+// }

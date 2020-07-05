@@ -12,7 +12,7 @@ export default class ScoreInput extends React.Component{
 
     render(){
 console.log("ScoreInput render");
-
+        
         const { score } = this.state;
         const { saveScore , addScoreData} = this.props;
         return (

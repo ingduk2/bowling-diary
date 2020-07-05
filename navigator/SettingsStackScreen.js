@@ -23,7 +23,6 @@ export function SettingsStackScreen() {
     return (
       <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
         <Settings/>
-        {/* <Test/> */}
       </View>
     );
   }
