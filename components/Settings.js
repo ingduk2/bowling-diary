@@ -31,7 +31,7 @@ const sections = [
         func : OpenSourceInfo
       },
       {
-        title: 'Settings 3',
+        title: 'Memos Setting',
         backgroundColor: YELLOW,
         icon: 'forward',
         func : OpenSourceInfo

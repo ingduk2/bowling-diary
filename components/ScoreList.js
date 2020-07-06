@@ -33,26 +33,6 @@ export default function ScoreList(props) {
     setIsEditing(false);
   }
 
-
-  const createTwoButtonAlert = () =>
-    Alert.alert(
-      "점수 수정",
-      "수정하장",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ],
-      { cancelable: false }
-    );
-
-
-  // let ms = props.createdAt
-  // let dateString = props.date;
-  // console.log(new Date(dateString).getTime(), new Date(ms).toLocaleString());
   // const time = new Date(ms).toLocaleString();
   return (
     <View style={styles.container}>

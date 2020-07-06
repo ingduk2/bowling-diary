@@ -29,6 +29,8 @@ export default function App() {
   const [test, setTest] = useState("test");
 
   const _cacheResourceAsync = async () => {
+    await new Promise(r => setTimeout(r, 1500));
+
     const images = [
       require('./assets/gorilla.png'),
       require('./assets/icon.png'),

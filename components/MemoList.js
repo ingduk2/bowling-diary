@@ -9,11 +9,12 @@ const { width, height } = Dimensions.get("window");
 
 
 export default function MemoList(props) {
-  const [searchValue, setSearchValue] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  
 
-
-  const {id, title, content , createdAt} = props;
+  const {id, title, content , createdAt, deleteMemo, updateMemo} = props;
+  const [newtitle, setNewTitle] = useState(title);
+  const [newcontent, setNewContent] = useState(content);
   return (
     <View style={styles.container}>
 
@@ -28,16 +29,33 @@ export default function MemoList(props) {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>메모 입력</Text>
-            <TextInput style={styles.modalInput}
-              placeholder="Score"
-              
+            <TextInput style={styles.modalTitle}
+              placeholder="제목"
+              value={newtitle}
               editable={true}
               underlineColorAndroid={"transparent"}
-              keyboardType='numeric'
-              maxLength={3}
-              returnKeyType={"done"}
-              
+              // keyboardType='numeric'
+              // maxLength={3}
+              // returnKeyType={"done"}
+              multiline={true}
+              autoCorrect={false}
+              onChangeText = {setNewTitle}
+
             ></TextInput>
+            <TextInput style={styles.modalContent}
+              value={newcontent}
+              placeholder="내용"
+              editable={true}
+              underlineColorAndroid={"transparent"}
+              // keyboardType='numeric'
+              // maxLength={3}
+              // returnKeyType={"done"}
+              multiline={true}
+              autoCorrect={false}
+              onChangeText = {setNewContent}
+            >
+
+            </TextInput>
             <View style={styles.actions}>
               <TouchableHighlight
                 style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
@@ -52,7 +70,12 @@ export default function MemoList(props) {
                 onPress={() => {
                   setModalVisible(!modalVisible);
                   //update Score...
-                  updateScoreData(id, newScore);
+                  const newMemo = {
+                    id : id,
+                    title : newtitle,
+                    content : newcontent
+                  }
+                  updateMemo(newMemo)
                 }}
               >
                 <Text style={styles.textStyle}>ok</Text>
@@ -60,7 +83,8 @@ export default function MemoList(props) {
             </View>
           </View>
         </View>
-      </Modal> 
+      </Modal>
+
 
 
 
@@ -68,13 +92,17 @@ export default function MemoList(props) {
         <View style={styles.column}>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.actions}>
-              <TouchableOpacity >
+              <TouchableOpacity onPress={() => {
+                setModalVisible(!modalVisible)
+                }}>
                 <View style={styles.actionContainer}>
                   <Text style={styles.actionText}>✏️</Text>
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                deleteMemo(id)}
+                }>
                 <View style={styles.actionContainer}>
                   <Text style={styles.actionText}>❌</Text>
                 </View>
@@ -144,5 +172,73 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginVertical: 10,
     // width: width / 2 + 40,
+  },
+
+
+
+
+  modalTitle: {
+    width: width / 2,
+    borderColor: 'black',
+    padding: 2,
+    margin: 10,
+    borderBottomColor: "#bbb",
+    borderBottomWidth: 1,
+    fontSize: 25,
+    // alignItems : 'center',
+    textAlign: 'center'
+    // justifyContent: 'center'
+
+  },
+  modalContent: {
+    width: width / 2,
+    height: height / 10,
+    borderColor: 'black',
+    padding: 2,
+    margin: 10,
+    borderBottomColor: "#bbb",
+    borderBottomWidth: 1,
+    fontSize: 25,
+    // alignItems : 'center',
+    textAlign: 'center'
+    // justifyContent: 'center'
+
+  },
+
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    textAlign: "center"
   }
 });

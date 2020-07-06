@@ -4,7 +4,6 @@ import {
   Platform, AsyncStorage, Alert, Modal, TouchableHighlight
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Memos from '../components/Memos';
 import MemoList from '../components/MemoList';
 import { ListItem, Divider, SearchBar } from 'react-native-elements';
 import { FloatingAction } from "react-native-floating-action";
@@ -50,6 +49,25 @@ const actions = [
 ];
 
 
+async function loadMemoDatas() {
+  let memoDatas = {};
+  try{
+      const datas = await AsyncStorage.getItem("memoDatas");
+      // console.log("datas", datas);
+      const parsedToDos = JSON.parse(datas);
+      console.log("parsedToDos", parsedToDos);
+      if (parsedToDos == null) {
+          memoDatas = {};
+      } else {
+          memoDatas = parsedToDos
+      }
+      
+  } catch (err) {
+      console.log(err);
+  }
+  return memoDatas;
+}
+
 function MemosScreen() {
   const [memos, setMemos] = useState({});
   const [searchValue, setSearchValue] = useState("");
@@ -59,7 +77,13 @@ function MemosScreen() {
 
 
   useEffect(() => {
+    const fetchData = async () => {
+      const diskMemoDatas = await loadMemoDatas();
+      // console.log(articleData);
+      setMemos(diskMemoDatas);
+  }
 
+  fetchData();
   }, []);
 
   const _addMemo = () => {
@@ -77,17 +101,33 @@ function MemosScreen() {
       ...memos,
       ...addMemo
     }
-
+    _saveMemosData(newMemos);
     setMemos(newMemos);
   }
 
   const _deleteMemo = (id) => {
-    
+    delete memos[id];
+    const newMemos = {
+      ...memos
+    }
+    _saveMemosData(newMemos);
+    setMemos(newMemos);
   }
 
-  const _updateMemo = () => {
-
+  const _updateMemo = (memo) => {
+    const {id, title, content} = memo;
+    const newMemos = {
+      ...memos,
+      [id] : {...memos[id] , title:title, content:content}
+    }
+    _saveMemosData(newMemos);
+    setMemos(newMemos);
   }
+
+  const _saveMemosData = (memos) => {
+    console.log(memos);
+    const saveMemosData = AsyncStorage.setItem("memoDatas", JSON.stringify(memos));
+};
 
   return (
     <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
@@ -103,7 +143,7 @@ function MemosScreen() {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>메모 입력</Text>
-            <TextInput style={styles.modalInput}
+            <TextInput style={styles.modalTitle}
               placeholder="제목"
               value={title}
               editable={true}
@@ -116,7 +156,7 @@ function MemosScreen() {
               onChangeText = {setTitle}
 
             ></TextInput>
-            <TextInput style={styles.modalInput}
+            <TextInput style={styles.modalContent}
               value={content}
               placeholder="내용"
               editable={true}
@@ -167,6 +207,8 @@ function MemosScreen() {
         }).map(memo => {
           return <MemoList 
             key ={memo.id}
+            deleteMemo={_deleteMemo}
+            updateMemo={_updateMemo}
             {...memo}
             />
         })}
@@ -204,8 +246,20 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row"
   },
+  modalTitle: {
+    width: width / 2,
+    borderColor: 'black',
+    padding: 2,
+    margin: 10,
+    borderBottomColor: "#bbb",
+    borderBottomWidth: 1,
+    fontSize: 25,
+    // alignItems : 'center',
+    textAlign: 'center'
+    // justifyContent: 'center'
 
-  modalInput: {
+  },
+  modalContent: {
     width: width / 2,
     height: height / 10,
     borderColor: 'black',
