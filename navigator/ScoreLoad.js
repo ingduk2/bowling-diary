@@ -1,6 +1,23 @@
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
 
-export default async function loadScoreDatas() {
+export const useScoreData = () => {
+    const [datas, setData] = useState({});
+
+    useEffect(() => {
+        console.log("ScoreLoads.useEffect");
+        const fetchData = async () => {
+            const datas = await loadScoreDatas();
+            // console.log(articleData);
+            setData(datas)
+        }
+        fetchData();
+    }, []);
+
+    return [datas, setData]
+}
+
+export async function loadScoreDatas() {
     let scoreDatas = {};
     try {
         const datas = await AsyncStorage.getItem("scoreDatas");
@@ -20,3 +37,4 @@ export default async function loadScoreDatas() {
     }
     return scoreDatas;
 }
+

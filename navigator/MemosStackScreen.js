@@ -205,12 +205,17 @@ function MemosScreen() {
         {Object.values(memos).sort((a,b) => {
           return b.createdAt - a.createdAt
         }).map(memo => {
+          console.log("===========================");
+          console.log(searchValue);
+
+          if(searchValue == "" || memo.title.includes(searchValue) || memo.content.includes(searchValue)){
           return <MemoList 
             key ={memo.id}
             deleteMemo={_deleteMemo}
             updateMemo={_updateMemo}
             {...memo}
             />
+          }
         })}
       </ScrollView>
       {/* <View style={styles.container}> */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,Button, Dimensions, TextInput, TouchableOpacity, Alert, Modal, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, Alert, Modal, TouchableHighlight } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import PropTypes from "prop-types";
 import { ListItem, Divider, SearchBar } from 'react-native-elements';
@@ -10,15 +10,16 @@ const { width, height } = Dimensions.get("window");
 
 export default function MemoList(props) {
   const [modalVisible, setModalVisible] = useState(false);
-  
 
-  const {id, title, content , createdAt, deleteMemo, updateMemo} = props;
+
+  const { id, title, content, createdAt, deleteMemo, updateMemo } = props;
   const [newtitle, setNewTitle] = useState(title);
   const [newcontent, setNewContent] = useState(content);
+  const createDate = new Date(createdAt).toLocaleString('ko-KR');
   return (
     <View style={styles.container}>
 
-<Modal
+      <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -39,7 +40,7 @@ export default function MemoList(props) {
               // returnKeyType={"done"}
               multiline={true}
               autoCorrect={false}
-              onChangeText = {setNewTitle}
+              onChangeText={setNewTitle}
 
             ></TextInput>
             <TextInput style={styles.modalContent}
@@ -52,7 +53,7 @@ export default function MemoList(props) {
               // returnKeyType={"done"}
               multiline={true}
               autoCorrect={false}
-              onChangeText = {setNewContent}
+              onChangeText={setNewContent}
             >
 
             </TextInput>
@@ -71,9 +72,9 @@ export default function MemoList(props) {
                   setModalVisible(!modalVisible);
                   //update Score...
                   const newMemo = {
-                    id : id,
-                    title : newtitle,
-                    content : newcontent
+                    id: id,
+                    title: newtitle,
+                    content: newcontent
                   }
                   updateMemo(newMemo)
                 }}
@@ -90,26 +91,28 @@ export default function MemoList(props) {
 
       <View>
         <View style={styles.column}>
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.actions}>
-              <TouchableOpacity onPress={() => {
-                setModalVisible(!modalVisible)
-                }}>
-                <View style={styles.actionContainer}>
-                  <Text style={styles.actionText}>✏️</Text>
-                </View>
-              </TouchableOpacity>
+          <Text style={styles.title}>{title}</Text>
+          <View style={styles.actions}>
+            <TouchableOpacity onPress={() => {
+              setModalVisible(!modalVisible)
+            }}>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>✏️</Text>
+              </View>
+            </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => {
-                deleteMemo(id)}
-                }>
-                <View style={styles.actionContainer}>
-                  <Text style={styles.actionText}>❌</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => {
+              deleteMemo(id)
+            }
+            }>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>❌</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-        <Text>{content}</Text>
+        <Text style={styles.date}>{createDate}</Text>
+        <Text style={styles.content}>{content}</Text>
       </View>
     </View>
   );
@@ -126,7 +129,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    marginVertical: 7
   },
   circle: {
     width: 30,
@@ -155,6 +159,8 @@ const styles = StyleSheet.create({
     color: "#353839"
   },
   column: {
+    borderBottomColor: "#bbb",
+    borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     alignItems: "center",
     width: width,
@@ -172,6 +178,16 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginVertical: 10,
     // width: width / 2 + 40,
+  },
+  date: {
+    fontWeight: "300",
+    fontSize: 15,
+  },
+  content: {
+    fontWeight: "100",
+    fontSize: 16,
+    marginVertical: 15,
+
   },
 
 

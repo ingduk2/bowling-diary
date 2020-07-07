@@ -26,8 +26,6 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [isReady , setIsReady] = useState(false);
 
-  const [test, setTest] = useState("test");
-
   const _cacheResourceAsync = async () => {
     await new Promise(r => setTimeout(r, 1500));
 
@@ -71,8 +69,8 @@ export default function App() {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Home" params={test} component={HomeStackScreen} options={{ title: 'Home Title' ,params:test}}/>
-        <Tab.Screen name="Stats"  component={StatsStackScreen} options={{title: 'Stats'}}/>
+        <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home'}}/>
+        <Tab.Screen name="Stats"  component={StatsStackScreen} options={{title: 'Stats'}} />
         <Tab.Screen name="Memos" component={MemosStackScreen} options={{title: 'Memos'}}/>
         <Tab.Screen name="Settings" component={SettingsStackScreen} options={{ title: 'Settings' }}/>
       </Tab.Navigator>

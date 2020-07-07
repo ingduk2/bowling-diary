@@ -10,7 +10,8 @@ import WixCalendar from '../components/WixCalendar';
 import { v1 as uuidv1 } from "uuid";
 import { seed } from "../uuid/uuidSeed";
 import ScoreList from '../components/ScoreList';
-import loadScoreDatas from './ScoreLoad';
+import Stats from '../components/Stats';
+import {loadScoreDatas, useScoreData, delivery} from './ScoreLoad';
 
 
 
@@ -70,6 +71,7 @@ export function HomeStackScreen(props) {
                     <AntDesign
                         name="instagram"
                         size={33}
+                        onPre
                         onPress={() => 
                             createTwoButtonAlert()
                         }
@@ -79,7 +81,7 @@ export function HomeStackScreen(props) {
                     <Feather
                         name="phone-forwarded"
                         size={33}
-                        onPress={() => Linking.openURL('tel:01012341234')}
+                        onPress={() => Linking.openURL('tel:01040400537')}
                         style={{ paddingLeft: 20 }}
                     />
                 ),
@@ -99,20 +101,10 @@ function HomeScreen() {
 
     const nowDate = year + '-' + (month.length == 1 ? '0' : '') + month + '-' + (day.length == 1 ? '0' : '') + day;
 
-    const [datas, setData] = useState({});
+    // const [datas, setData] = useState({});
+    const [datas, setData] = useScoreData();
     const [_score , set_Score] = useState();
     const [_date, set_Date] = useState(nowDate);
-
-    useEffect(() => {
-
-        const fetchData = async () => {
-            const diskScoreDatas = await loadScoreDatas();
-            // console.log(articleData);
-            setData(diskScoreDatas)
-        }
-
-        fetchData();
-    }, []);
 
 
     const Save = () => {
@@ -186,11 +178,13 @@ function HomeScreen() {
     }
 
     const _saveScoreData = (datas) => {
-        const saveScoreData = AsyncStorage.setItem("scoreDatas", JSON.stringify(datas));
+        
+        const saveScoreDatas = AsyncStorage.setItem("scoreDatas", JSON.stringify(datas));
     };
 
     return (
         <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
+            {/* <ScrollView> */}
             <View>
                 <ScrollView>
                     <View style={{
@@ -222,6 +216,10 @@ function HomeScreen() {
                     })}
                 </ScrollView>
             </View>
+            {/* <View>
+                <Stats datas={datas}/>
+            </View> */}
+            {/* </ScrollView> */}
         </View>
     );
 }

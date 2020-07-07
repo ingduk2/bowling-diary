@@ -16,7 +16,7 @@ ScoreList.propTypes = {
 };
 
 export default function ScoreList(props) {
-
+  console.log(props);
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const { deleteScoreData, updateScoreData, id, date, score } = props;

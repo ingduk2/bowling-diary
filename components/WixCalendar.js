@@ -162,6 +162,15 @@ export default class WixCalendar extends Component {
         //     paramStr
             
         //   }}
+
+        pastScrollRange={10}
+  // Max amount of months allowed to scroll to the future. Default = 50
+  futureScrollRange={10}
+  // Enable or disable scrolling of calendar list
+  scrollEnabled={true}
+  // Enable or disable vertical scroll indicator. Default = false
+  showScrollIndicator={true}
+
         markedDates={markedObject}
         />
       </View>
