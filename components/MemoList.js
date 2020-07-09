@@ -13,6 +13,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import { Entypo, Feather } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -86,7 +87,7 @@ export default function MemoList(props) {
                     newtitle,
                     newcontent,
                   };
-                  console.log("==============",newMemo);
+                  console.log('==============', newMemo);
                   updateMemo(newMemo);
                 }}
               >
@@ -107,7 +108,8 @@ export default function MemoList(props) {
               }}
             >
               <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>✏️</Text>
+                {/* <Text style={styles.actionText}>✏️</Text> */}
+                <Entypo name="pencil" size={24} color="black" />
               </View>
             </TouchableOpacity>
 
@@ -117,7 +119,8 @@ export default function MemoList(props) {
               }}
             >
               <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>❌</Text>
+                {/* <Text style={styles.actionText}>❌</Text> */}
+                <Feather name="trash-2" size={24} color="black" />
               </View>
             </TouchableOpacity>
           </View>

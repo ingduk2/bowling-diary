@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import PropTypes from 'prop-types';
-import Stats from '../components/Stats';
+import Stats from '../components/stats/Stats';
 import { loadScoreDatas } from './ScoreLoad';
 
 const StatsStack = createStackNavigator();
@@ -25,13 +25,13 @@ function StatsScreen({ navigation }) {
         console.log('Screen was ffffffffffffocused');
         loadScoreDatass();
       }),
-    []
+    [],
   );
 
   React.useEffect(
     // eslint-disable-next-line react/prop-types
     () => navigation.addListener('blur', () => console.log('Screen was unfocused')),
-    []
+    [],
   );
 
   return (

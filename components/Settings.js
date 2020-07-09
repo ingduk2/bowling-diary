@@ -17,14 +17,14 @@ const sections = [
   {
     data: [
       {
-        title: 'Home Setting',
+        title: '홈 설정',
         backgroundColor: RED,
         icon: 'forward',
         // eslint-disable-next-line no-use-before-define
         func: OpenSourceInfo,
       },
       {
-        title: 'Stats Setting',
+        title: '통계 설정',
         backgroundColor: ORANGE,
         icon: 'forward',
         // rightTitle: 'Off',
@@ -32,14 +32,14 @@ const sections = [
         func: OpenSourceInfo,
       },
       {
-        title: 'Memos Setting',
+        title: '메모장 설정',
         backgroundColor: YELLOW,
         icon: 'forward',
         // eslint-disable-next-line no-use-before-define
         func: OpenSourceInfo,
       },
       {
-        title: 'OpenSourceInfo',
+        title: '앱 정보',
         backgroundColor: GREEN,
         icon: 'forward',
         // rightTitle: 'Off',
@@ -60,8 +60,14 @@ export default class Settings extends React.PureComponent {
     item: { title, backgroundColor, icon, rightTitle, hideChevron, checkbox, func },
   }) => (
     <ListItem
-      containerStyle={{ paddingVertical: 8 }}
-      switch={checkbox && { value: true }}
+      containerStyle={{
+        paddingVertical: 8,
+      }}
+      switch={
+        checkbox && {
+          value: true,
+        }
+      }
       key={title}
       chevron={!hideChevron}
       rightTitle={rightTitle}

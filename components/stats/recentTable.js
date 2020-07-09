@@ -2,20 +2,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
-import { LineChart } from 'react-native-chart-kit';
 import PropTypes from 'prop-types';
 
 const { width } = Dimensions.get('window');
 
-export default class Stats extends React.Component {
+export default class RecentTable extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       tableHead: ['', 'low', 'high', 'avg'],
-
-      fullTableTitle: [''],
-      fullTableData: [['0', '0', '0']],
 
       tableTitle: ['3 게임', '6 게임', '9 게임', '-', '-'],
       tableData: [
@@ -25,7 +21,6 @@ export default class Stats extends React.Component {
         ['-', '-', '-'],
         ['-', '-', '-'],
       ],
-      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     };
   }
 
@@ -34,7 +29,7 @@ export default class Stats extends React.Component {
     const nowDay = new Date();
     const year = nowDay.getFullYear().toString();
 
-    const { tableHead, tableTitle, data, fullTableData, fullTableTitle, tableData } = this.state;
+    const { tableHead, tableTitle, tableData } = this.state;
     const { datas } = this.props;
 
     console.log(datas);
@@ -141,68 +136,8 @@ export default class Stats extends React.Component {
     tableData[2][1] = stats9.high;
     tableData[2][2] = stats9.avg;
 
-    Object.values(datas).map((eachData) => {
-      const dateObject = new Date(eachData.date);
-      const month = dateObject.getMonth();
-      //
-      countArr[Number(month)] += 1;
-      sumArr[Number(month)] += Number(eachData.score);
-      fullStats.low = Math.min(fullStats.low, Number(eachData.score));
-      fullStats.high = Math.max(fullStats.high, Number(eachData.score));
-      fullStats.sum += Number(eachData.score);
-      fullStats.cnt += 1;
-      return null;
-    });
-
-    fullStats.avg = Math.round(fullStats.sum / fullStats.cnt);
-    // console.log(fullStats);
-    const fullStatsArr = [];
-    fullStatsArr.push(fullStats.low); // low
-    fullStatsArr.push(fullStats.high); // high
-    fullStatsArr.push(fullStats.avg); // avg
-
-    for (let i = 0; i < 3; i += 1) {
-      fullTableData[0][i] = fullStatsArr[i];
-    }
-    fullTableTitle[0] = `${fullStats.cnt} 게임`;
-
-    // test
-    // setState 안해도 되는건가 원래..?
-    for (let i = 0; i < data.length; i += 1) {
-      if (sumArr[i] !== 0) {
-        data[i] = Math.round(sumArr[i] / countArr[i]);
-      }
-    }
-    // test
-    // console.log("======chart=======", data);
     return (
       <View style={styles.container}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 10 }}>
-          <Text style={styles.text}>전체 통계</Text>
-        </View>
-        <Table borderStyle={{ borderWidth: 1 }}>
-          <Row
-            data={tableHead}
-            flexArr={[1, 1, 1, 1]}
-            style={styles.head}
-            textStyle={styles.text}
-          />
-          <TableWrapper style={styles.wrapper}>
-            <Col
-              data={fullTableTitle}
-              style={styles.title}
-              heightArr={[28, 28]}
-              textStyle={styles.text}
-            />
-            <Rows
-              data={fullTableData}
-              flexArr={[1, 1, 1]}
-              style={styles.row}
-              textStyle={styles.text}
-            />
-          </TableWrapper>
-        </Table>
-
         <View
           style={{
             justifyContent: 'center',
@@ -230,79 +165,12 @@ export default class Stats extends React.Component {
             <Rows data={tableData} flexArr={[1, 1, 1]} style={styles.row} textStyle={styles.text} />
           </TableWrapper>
         </Table>
-
-        <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 30 }}>
-          <View style={styles.chartArrow}>
-            <Text style={{ paddingLeft: 20, fontSize: 20 }}>&lt;</Text>
-
-            <Text>{year} 월간 차트</Text>
-
-            <Text style={{ paddingRight: 20, fontSize: 20 }}>&lt;</Text>
-          </View>
-
-          <LineChart
-            data={{
-              labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-              datasets: [
-                {
-                  data,
-                },
-              ],
-            }}
-            width={Dimensions.get('window').width} // from react-native
-            height={220}
-            yAxisLabel=""
-            yAxisSuffix=""
-            segments={8}
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              // barPercentage: 10,
-              backgroundColor: '#ffffff',
-              backgroundGradientFrom: '#ffffff',
-              backgroundGradientTo: '#ffffff',
-              decimalPlaces: 0, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(135, 206, 235, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              style: {
-                borderRadius: 20,
-              },
-              propsForDots: {
-                r: '2',
-                strokeWidth: '2',
-                stroke: '#617982',
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 10,
-              borderRadius: 8,
-              margin: 10,
-              borderColor: 'black',
-              borderWidth: 1,
-            }}
-          />
-        </View>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 40, backgroundColor: '#f1f8ff' },
-  wrapper: { flexDirection: 'row' },
-  title: { flex: 1, backgroundColor: '#f6f8fa' },
-  row: { height: 28 },
-  text: { textAlign: 'center' },
-  chartArrow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width,
-    justifyContent: 'space-between',
-  },
-});
-
-Stats.propTypes = {
+RecentTable.propTypes = {
   datas: PropTypes.shape({
     id: PropTypes.string,
     score: PropTypes.string,
@@ -310,3 +178,24 @@ Stats.propTypes = {
     createdAt: PropTypes.number,
   }).isRequired,
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, paddingTop: 10, backgroundColor: '#fff' },
+  head: { height: 40, backgroundColor: '#f1f8ff' },
+  wrapper: { flexDirection: 'row' },
+  title: { flex: 1, backgroundColor: '#f6f8fa' },
+  row: { height: 28 },
+  text: { textAlign: 'center' },
+  chartArrowWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width,
+    justifyContent: 'space-between',
+  },
+  chartArrow: {
+    padding: 10,
+    fontSize: 20,
+    color: '#B9DEFF',
+    fontWeight: '700',
+  },
+});

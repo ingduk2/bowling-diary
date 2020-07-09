@@ -1,4 +1,5 @@
 {
+  "plugins": ["prettier", "react", "import"],
   "extends": [
     "airbnb",
     "prettier",
@@ -6,9 +7,9 @@
     "plugin:prettier/recommended",
     "eslint-config-prettier"
   ],
-  "env" : {
+  "env": {
     "browser": true,
-    "node" : true
+    "node": true
   },
   "parser": "babel-eslint",
   "rules": {
@@ -19,14 +20,6 @@
         "extensions": [".js", ".jsx"]
       }
     ],
-    "prettier/prettier": [
-      "error",
-      {
-        "trailingComma": "es5",
-        "singleQuote": true,
-        "printWidth": 100
-      }
-    ]
-  },
-  "plugins": ["prettier", "react"]
+    "prettier/prettier": ["error"]
+  }
 }

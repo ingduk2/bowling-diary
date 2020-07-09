@@ -15,8 +15,18 @@ const HomeStack = createStackNavigator();
 
 function LogoTitle() {
   return (
-    <View style={{ alignItems: 'center' }}>
-      <Image style={{ width: 110, height: 40 }} source={require('../assets/gorilla.png')} />
+    <View
+      style={{
+        alignItems: 'center',
+      }}
+    >
+      <Image
+        style={{
+          width: 110,
+          height: 40,
+        }}
+        source={require('../assets/gorilla.png')}
+      />
     </View>
   );
 }
@@ -46,7 +56,7 @@ export default function HomeStackScreen() {
           },
         },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
 
   return (
@@ -66,7 +76,9 @@ export default function HomeStackScreen() {
               size={33}
               onPre
               onPress={() => createTwoButtonAlert()}
-              style={{ paddingRight: 20 }}
+              style={{
+                paddingRight: 20,
+              }}
             />
           ),
           headerLeft: () => (
@@ -74,7 +86,9 @@ export default function HomeStackScreen() {
               name="phone-forwarded"
               size={33}
               onPress={() => Linking.openURL('tel:01040400537')}
-              style={{ paddingLeft: 20 }}
+              style={{
+                paddingLeft: 20,
+              }}
             />
           ),
         }}
@@ -100,7 +114,9 @@ function HomeScreen() {
   const [_date, setDate] = useState(nowDate);
 
   const Save = () => {
-    const ID = uuidv1({ random: seed() });
+    const ID = uuidv1({
+      random: seed(),
+    });
     console.log('Save', _score, _date, ID);
     const newDataObject = {
       [ID]: {
@@ -157,7 +173,10 @@ function HomeScreen() {
     const newDatas = {
       ...datas,
 
-      [id]: { ...datas[id], score },
+      [id]: {
+        ...datas[id],
+        score,
+      },
     };
     saveScoreData(newDatas);
     setData(newDatas);
@@ -168,32 +187,34 @@ function HomeScreen() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
+    <View
+      style={{
+        flex: 1,
+        padding: 2,
+        backgroundColor: '#fff',
+      }}
+    >
       {/* <ScrollView> */}
       <View>
         <ScrollView>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              // width: width / 2
-            }}
-          >
-            {/* <FontAwesome5 name="bowling-ball" size={35} /> */}
-            <ScoreInput saveScore={saveScore} addScoreData={addScoreData} />
-            {/* <AntDesign name="enter" size={35} color="black" onPress={() => _addScoreData() }/> */}
-          </View>
+          {/* <View> */}
+          {/* </View> */}
           <WixCalendar saveDate={saveDate} datas={datas} nowDate={nowDate} />
+          <ScoreInput saveScore={saveScore} addScoreData={addScoreData} />
         </ScrollView>
       </View>
       <View style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+        <ScrollView
+          contentContainerStyle={{
+            alignItems: 'center',
+          }}
+        >
           {Object.values(datas == null ? {} : datas)
             .sort(
               (a, b) =>
                 // a.date - b.date
-                new Date(b.date).getTime() - new Date(a.date).getTime()
+                // new Date(b.date).getTime() - new Date(a.date).getTime(),
+                b.createdAt - a.createdAt,
             )
             .map((data) => {
               if (data.date === _date) {

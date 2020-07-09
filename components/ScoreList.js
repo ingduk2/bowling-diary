@@ -12,7 +12,7 @@ import {
   Modal,
   TouchableHighlight,
 } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, Feather } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 const { width } = Dimensions.get('window');
@@ -115,7 +115,8 @@ export default function ScoreList(props) {
           <View style={styles.actions}>
             <TouchableOpacity onPressOut={startEditing}>
               <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>✏️</Text>
+                {/* <Text style={styles.actionText}>✏️</Text> */}
+                <Entypo name="pencil" size={24} color="black" />
               </View>
             </TouchableOpacity>
 
@@ -125,7 +126,8 @@ export default function ScoreList(props) {
               }}
             >
               <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>❌</Text>
+                {/* <Text style={styles.actionText}>❌</Text> */}
+                <Feather name="trash-2" size={24} color="black" />
               </View>
             </TouchableOpacity>
           </View>
