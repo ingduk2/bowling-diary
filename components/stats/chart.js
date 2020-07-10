@@ -88,9 +88,7 @@ export default class Chart extends React.Component {
             >
               <Text style={styles.chartArrow}>&lt;</Text>
             </TouchableOpacity>
-            <Text>
-              {currentYear}년 {currentMonth}월 차트
-            </Text>
+            <Text>{currentYear}년 차트</Text>
             <TouchableOpacity
               onPress={() => {
                 const afterYear = Number(currentYear) + 1;

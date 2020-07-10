@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import PropTypes from 'prop-types';
 import { getYearYYYY, getMonthMM, numberAppendZero } from '../../constants/const';
@@ -16,72 +16,62 @@ export default class ChartMonth extends React.Component {
     this.state = {
       currentYear,
       currentMonth,
-      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     };
   }
 
   render() {
     console.log('render1');
     // const nowDay = new Date();
+    const data = [0];
+    const labels = [0];
 
     const { currentYear, currentMonth } = this.state;
     console.log(currentMonth);
 
-    const { data } = this.state;
     const { datas } = this.props;
 
     // console.log(datas);
     // 월 별로 만들어야함.
 
-    const sumArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const countArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Object.values(datas)
+      .sort((a, b) => {
+        return a.createdAt - b.createdAt;
+      })
+      .map((eachData) => {
+        const dateObject = new Date(eachData.date);
+        const month = dateObject.getMonth() + 1;
+        // console.log(month);
+        if (numberAppendZero(month) === currentMonth) {
+          console.log(eachData);
+          data.push(eachData.score);
+          labels.push(dateObject.getDate());
+        }
 
-    const fullStats = {
-      low: 301,
-      high: 0,
-      sum: 0,
-      cnt: 0,
-      avg: 0,
-    };
+        return null;
+      });
 
-    Object.values(datas).map((eachData) => {
-      const dateObject = new Date(eachData.date);
-      const month = dateObject.getMonth();
-      //
-      countArr[Number(month)] += 1;
-      sumArr[Number(month)] += Number(eachData.score);
-      fullStats.low = Math.min(fullStats.low, Number(eachData.score));
-      fullStats.high = Math.max(fullStats.high, Number(eachData.score));
-      fullStats.sum += Number(eachData.score);
-      fullStats.cnt += 1;
-      return null;
-    });
+    console.log(data);
+    console.log(labels);
 
-    fullStats.avg = Math.round(fullStats.sum / fullStats.cnt);
-    // console.log(fullStats);
-    const fullStatsArr = [];
-    fullStatsArr.push(fullStats.low); // low
-    fullStatsArr.push(fullStats.high); // high
-    fullStatsArr.push(fullStats.avg); // avg
-
-    // test
-    // setState 안해도 되는건가 원래..?
-    for (let i = 0; i < data.length; i += 1) {
-      if (sumArr[i] !== 0) {
-        data[i] = Math.round(sumArr[i] / countArr[i]);
-      }
-    }
-    // test
-    // console.log("======chart=======", data);
     return (
       <View style={styles.container}>
         <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
           <View style={styles.chartArrowWrapper}>
             <TouchableOpacity
               onPress={() => {
-                const beforeMonth = numberAppendZero(Number(currentMonth) - 1);
-                console.log(beforeMonth);
+                // 왜 2020-7-08 되면 이상해지고 2020-07-08 되야 멀쩡하니 ㅡㅡ;;
+                const dateString = `${currentYear}-${currentMonth}-01`;
+                // console.log(dateString);
+                const dateObject = new Date(dateString);
+                // console.log(dateObject);
+                dateObject.setMonth(dateObject.getMonth() - 1);
+                // console.log(dateObject.getFullYear());
+                // console.log(dateObject.getMonth() + 1);
+                // console.log(dateObject.getDate());
+                const beforeMonth = numberAppendZero(Number(dateObject.getMonth() + 1));
+                // console.log(beforeDay);
                 this.setState({
+                  currentYear: dateObject.getFullYear(),
                   currentMonth: beforeMonth,
                 });
               }}
@@ -93,10 +83,20 @@ export default class ChartMonth extends React.Component {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                const nextMonth = numberAppendZero(Number(currentMonth) + 1);
-                console.log(nextMonth);
+                // 왜 2020-7-08 되면 이상해지고 2020-07-08 되야 멀쩡하니 ㅡㅡ;;
+                const dateString = `${currentYear}-${currentMonth}-01`;
+                // console.log(dateString);
+                const dateObject = new Date(dateString);
+                // console.log(dateObject);
+                dateObject.setMonth(dateObject.getMonth() + 1);
+                // console.log(dateObject.getFullYear());
+                // console.log(dateObject.getMonth() + 1);
+                // console.log(dateObject.getDate());
+                const afterMonth = numberAppendZero(Number(dateObject.getMonth() + 1));
+                // console.log(beforeDay);
                 this.setState({
-                  currentMonth: nextMonth,
+                  currentYear: dateObject.getFullYear(),
+                  currentMonth: afterMonth,
                 });
               }}
             >
@@ -106,7 +106,7 @@ export default class ChartMonth extends React.Component {
 
           <LineChart
             data={{
-              labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+              labels,
               datasets: [
                 {
                   data,
