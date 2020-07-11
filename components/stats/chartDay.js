@@ -30,8 +30,8 @@ export default class ChartDay extends React.Component {
     const { currentYear, currentMonth, currentDay } = this.state;
     console.log(currentMonth);
 
-    const data = [0];
-    const labels = [0];
+    const data = [];
+    const labels = [];
     const { datas } = this.props;
 
     let count = 1;
@@ -51,17 +51,11 @@ export default class ChartDay extends React.Component {
         }
         return null;
       });
-    // console.log(data, data.length);
-    // console.log(labels);
 
-    // setState 안해도 되는건가 원래..?
-    // for (let i = 0; i < data.length; i += 1) {
-    //   if (sumArr[i] !== 0) {
-    //     data[i] = Math.round(sumArr[i] / countArr[i]);
-    //   }
-    // }
-    // test
-    // console.log("======chart=======", data);
+    if (data.length === 0) {
+      data.push(0);
+      labels.push('no game');
+    }
     return (
       <View style={styles.container}>
         <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
@@ -127,11 +121,14 @@ export default class ChartDay extends React.Component {
             width={Dimensions.get('window').width} // from react-native
             height={220}
             yAxisLabel=""
-            yAxisSuffix=""
+            yAxisSuffix=" 점"
             segments={4}
             yAxisInterval={1} // optional, defaults to 1
+            fromZero
             chartConfig={{
-              // barPercentage: 10,
+              // barPercentage: 100,
+              // barRadius: 10,
+              // strokeWidth: 3,
               backgroundColor: '#ffffff',
               backgroundGradientFrom: '#ffffff',
               backgroundGradientTo: '#ffffff',
@@ -142,18 +139,36 @@ export default class ChartDay extends React.Component {
                 borderRadius: 20,
               },
               propsForDots: {
-                r: '2',
+                r: '3',
                 strokeWidth: '2',
                 stroke: '#617982',
               },
             }}
             bezier
             style={{
-              marginVertical: 10,
+              marginVertical: 1,
+              alignItems: 'center',
               borderRadius: 8,
-              margin: 10,
+              margin: 3.9,
               borderColor: 'black',
               borderWidth: 1,
+            }}
+            onDataPointClick={(value) => {
+              const idx = value.index;
+              // console.log(currentYear, currentMonth, labels[idx], value.value);
+              const gameIdx = labels[idx];
+              const scoreStr =
+                currentYear +
+                '-' +
+                currentMonth +
+                '-' +
+                currentDay +
+                ' ' +
+                gameIdx +
+                '게임 ' +
+                value.value +
+                '점';
+              Alert.alert(scoreStr);
             }}
           />
         </View>
@@ -188,6 +203,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 30,
     color: '#B9DEFF',
-    fontWeight: '700',
+    fontWeight: '600',
   },
 });

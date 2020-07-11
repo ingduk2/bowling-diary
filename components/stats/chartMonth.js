@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import PropTypes from 'prop-types';
 import { getYearYYYY, getMonthMM, numberAppendZero } from '../../constants/const';
@@ -20,10 +20,18 @@ export default class ChartMonth extends React.Component {
   }
 
   render() {
+    function makeMonthChartData() {}
+
     console.log('render1');
     // const nowDay = new Date();
-    const data = [0];
-    const labels = [0];
+    const data = [];
+    const labels = [];
+    const monthScoreArr = new Array(31);
+    const monthCntArr = new Array(31);
+    for (let i = 0; i < 31; i += 1) {
+      monthScoreArr[i] = 0;
+      monthCntArr[i] = 0;
+    }
 
     const { currentYear, currentMonth } = this.state;
     console.log(currentMonth);
@@ -31,27 +39,35 @@ export default class ChartMonth extends React.Component {
     const { datas } = this.props;
 
     // console.log(datas);
-    // 월 별로 만들어야함.
-
+    // 월 안에 하루의 avg 로 보여주자.
     Object.values(datas)
       .sort((a, b) => {
-        return a.createdAt - b.createdAt;
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
       })
       .map((eachData) => {
         const dateObject = new Date(eachData.date);
         const month = dateObject.getMonth() + 1;
         // console.log(month);
         if (numberAppendZero(month) === currentMonth) {
-          console.log(eachData);
-          data.push(eachData.score);
-          labels.push(dateObject.getDate());
+          const day = Number(dateObject.getDate());
+          monthScoreArr[day - 1] += Number(eachData.score);
+          monthCntArr[day - 1] += 1;
         }
 
         return null;
       });
 
-    console.log(data);
-    console.log(labels);
+    for (let i = 0; i < 31; i += 1) {
+      if (monthScoreArr[i] !== 0) {
+        data.push(Math.round(monthScoreArr[i] / monthCntArr[i]));
+        labels.push(i + 1);
+      }
+    }
+
+    if (data.length === 0) {
+      data.push(0);
+      labels.push('no name');
+    }
 
     return (
       <View style={styles.container}>
@@ -105,6 +121,7 @@ export default class ChartMonth extends React.Component {
           </View>
 
           <LineChart
+            fromZero
             data={{
               labels,
               datasets: [
@@ -116,7 +133,8 @@ export default class ChartMonth extends React.Component {
             width={Dimensions.get('window').width} // from react-native
             height={220}
             yAxisLabel=""
-            yAxisSuffix=""
+            yAxisSuffix=" 점"
+            xAxisLabel=""
             segments={4}
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
@@ -131,18 +149,34 @@ export default class ChartMonth extends React.Component {
                 borderRadius: 20,
               },
               propsForDots: {
-                r: '2',
+                r: '3',
                 strokeWidth: '2',
                 stroke: '#617982',
               },
             }}
             bezier
             style={{
-              marginVertical: 10,
+              marginVertical: 1,
+              alignItems: 'center',
               borderRadius: 8,
-              margin: 10,
+              margin: 3.9,
               borderColor: 'black',
               borderWidth: 1,
+            }}
+            onDataPointClick={(value) => {
+              const idx = value.index;
+              // console.log(currentYear, currentMonth, labels[idx], value.value);
+              const currentDate = labels[idx];
+              const scoreStr =
+                currentYear +
+                '-' +
+                currentMonth +
+                '-' +
+                numberAppendZero(currentDate.toString()) +
+                ' 에버리지' +
+                value.value +
+                '점';
+              Alert.alert(scoreStr);
             }}
           />
         </View>
@@ -175,8 +209,8 @@ const styles = StyleSheet.create({
   },
   chartArrow: {
     padding: 10,
-    fontSize: 20,
+    fontSize: 30,
     color: '#B9DEFF',
-    fontWeight: '700',
+    fontWeight: '600',
   },
 });

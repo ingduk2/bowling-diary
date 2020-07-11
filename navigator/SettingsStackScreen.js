@@ -1,9 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Settings from '../components/Settings';
+import Settings from '../components/settings/Settings';
 
-import OpenSourceInfo from '../components/OpenSourceInfo';
+import Login from '../components/settings/Login';
+import HomeSettings from '../components/settings/HomeSettings';
+import StatsSettings from '../components/settings/StatsSettings';
+import MemoSettings from '../components/settings/MemoSettings';
+import OpenSourceInfo from '../components/settings/OpenSourceInfo';
 
 const SettingsStack = createStackNavigator();
 
@@ -20,6 +24,10 @@ export default function SettingsStackScreen() {
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={SettingsScreen} />
       {/* <SettingsStack.Screen name="Details" component={DetailsScreen} /> */}
+      <SettingsStack.Screen name="Login" component={Login} />
+      <SettingsStack.Screen name="HomeSettings" component={HomeSettings} />
+      <SettingsStack.Screen name="StatsSettings" component={StatsSettings} />
+      <SettingsStack.Screen name="MemoSettings" component={MemoSettings} />
       <SettingsStack.Screen name="OpenSourceInfo" component={OpenSourceInfo} />
     </SettingsStack.Navigator>
   );

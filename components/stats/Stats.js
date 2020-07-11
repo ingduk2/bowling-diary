@@ -12,8 +12,6 @@ export default function Stats(props) {
   console.log('render1');
   const { datas } = props;
 
-  console.log(datas);
-
   return (
     <View>
       <EntireTable datas={datas} />

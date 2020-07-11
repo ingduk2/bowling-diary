@@ -3,10 +3,10 @@ import React from 'react';
 import { View, StyleSheet, SectionList } from 'react-native';
 
 import { ListItem, Divider } from 'react-native-elements';
-import * as RootNavigation from '../navi/RootNavigation';
+import * as RootNavigation from '../../navi/RootNavigation';
 
 const ORANGE = '#FF9500';
-// const BLUE = '#007AFF';
+const BLUE = '#007AFF';
 const GREEN = '#4CD964';
 const RED = '#FF3B30';
 // const GREY = '#8E8E93';
@@ -17,47 +17,59 @@ const sections = [
   {
     data: [
       {
-        title: '홈 설정',
+        title: '로그인',
         backgroundColor: RED,
         icon: 'forward',
         // eslint-disable-next-line no-use-before-define
-        func: OpenSourceInfo,
+        func: settingNavigate,
+        screenName: 'Login',
+      },
+      {
+        title: '홈 설정',
+        backgroundColor: ORANGE,
+        icon: 'forward',
+        // eslint-disable-next-line no-use-before-define
+        func: settingNavigate,
+        screenName: 'HomeSettings',
       },
       {
         title: '통계 설정',
-        backgroundColor: ORANGE,
+        backgroundColor: YELLOW,
         icon: 'forward',
         // rightTitle: 'Off',
         // eslint-disable-next-line no-use-before-define
-        func: OpenSourceInfo,
+        func: settingNavigate,
+        screenName: 'StatsSettings',
       },
       {
         title: '메모장 설정',
-        backgroundColor: YELLOW,
+        backgroundColor: GREEN,
         icon: 'forward',
         // eslint-disable-next-line no-use-before-define
-        func: OpenSourceInfo,
+        func: settingNavigate,
+        screenName: 'MemoSettings',
       },
       {
         title: '앱 정보',
-        backgroundColor: GREEN,
+        backgroundColor: BLUE,
         icon: 'forward',
         // rightTitle: 'Off',
         // eslint-disable-next-line no-use-before-define
-        func: OpenSourceInfo,
+        func: settingNavigate,
+        screenName: 'OpenSourceInfo',
       },
     ],
   },
 ];
 
 // Arrow 로는 불가능한가....
-function OpenSourceInfo() {
-  RootNavigation.navigate('OpenSourceInfo', {});
+function settingNavigate(name) {
+  RootNavigation.navigate(name, {});
 }
 
 export default class Settings extends React.PureComponent {
   renderItem = ({
-    item: { title, backgroundColor, icon, rightTitle, hideChevron, checkbox, func },
+    item: { title, backgroundColor, icon, rightTitle, hideChevron, checkbox, func, screenName },
   }) => (
     <ListItem
       containerStyle={{
@@ -71,7 +83,7 @@ export default class Settings extends React.PureComponent {
       key={title}
       chevron={!hideChevron}
       rightTitle={rightTitle}
-      onPress={() => func()}
+      onPress={() => func(screenName)}
       leftIcon={{
         type: 'AntDesign',
         name: icon,
@@ -79,8 +91,8 @@ export default class Settings extends React.PureComponent {
         color: 'white',
         containerStyle: {
           backgroundColor,
-          width: 40,
-          height: 40,
+          width: 30,
+          height: 30,
           borderRadius: 6,
           alignItems: 'center',
           justifyContent: 'center',
@@ -111,7 +123,7 @@ export default class Settings extends React.PureComponent {
       <>
         <SectionList
           keyExtractor={this.keyExtractor}
-          ListHeaderComponent={this.ListHeaderComponent}
+          // ListHeaderComponent={this.ListHeaderComponent}
           contentContainerStyle={styles.containerStyle}
           sections={sections}
           renderItem={this.renderItem}

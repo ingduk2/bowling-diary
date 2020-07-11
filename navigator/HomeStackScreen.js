@@ -194,14 +194,11 @@ function HomeScreen() {
         backgroundColor: '#fff',
       }}
     >
-      {/* <ScrollView> */}
       <View>
         <ScrollView>
-          {/* <View> */}
-          {/* </View> */}
           <WixCalendar saveDate={saveDate} datas={datas} nowDate={nowDate} />
-          <ScoreInput saveScore={saveScore} addScoreData={addScoreData} />
         </ScrollView>
+        <ScoreInput saveScore={saveScore} addScoreData={addScoreData} />
       </View>
       <View style={{ flex: 1 }}>
         <ScrollView

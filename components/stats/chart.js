@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import PropTypes from 'prop-types';
 import { getYearYYYY, getMonthMM, numberAppendZero } from '../../constants/const';
@@ -35,7 +35,7 @@ export default class Chart extends React.Component {
 
     const sumArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const countArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
+    const labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     const fullStats = {
       low: 301,
       high: 0,
@@ -103,8 +103,9 @@ export default class Chart extends React.Component {
           </View>
 
           <LineChart
+            fromZero
             data={{
-              labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+              labels,
               datasets: [
                 {
                   data,
@@ -114,7 +115,7 @@ export default class Chart extends React.Component {
             width={Dimensions.get('window').width} // from react-native
             height={220}
             yAxisLabel=""
-            yAxisSuffix=""
+            yAxisSuffix=" 점"
             segments={4}
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
@@ -129,18 +130,32 @@ export default class Chart extends React.Component {
                 borderRadius: 20,
               },
               propsForDots: {
-                r: '2',
+                r: '3',
                 strokeWidth: '2',
                 stroke: '#617982',
               },
             }}
             bezier
             style={{
-              marginVertical: 10,
+              marginVertical: 1,
+              alignItems: 'center',
               borderRadius: 8,
-              margin: 10,
+              margin: 3.9,
               borderColor: 'black',
               borderWidth: 1,
+            }}
+            onDataPointClick={(value) => {
+              const idx = value.index;
+              // console.log(currentYear, currentMonth, labels[idx], value.value);
+              const currentMonth = labels[idx];
+              const scoreStr =
+                currentYear +
+                '-' +
+                numberAppendZero(currentMonth) +
+                ' 에버리지' +
+                value.value +
+                '점';
+              Alert.alert(scoreStr);
             }}
           />
         </View>
@@ -173,8 +188,8 @@ const styles = StyleSheet.create({
   },
   chartArrow: {
     padding: 10,
-    fontSize: 20,
+    fontSize: 30,
     color: '#B9DEFF',
-    fontWeight: '700',
+    fontWeight: '600',
   },
 });

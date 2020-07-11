@@ -32,9 +32,7 @@ export default class RecentTable extends React.Component {
     const { tableHead, tableTitle, tableData } = this.state;
     const { datas } = this.props;
 
-    console.log(datas);
     // 월 별로 만들어야함.
-
     const sumArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const countArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
