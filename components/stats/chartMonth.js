@@ -154,10 +154,9 @@ export default class ChartMonth extends React.Component {
                 stroke: '#617982',
               },
             }}
-            bezier
+            // bezier
             style={{
               marginVertical: 1,
-              alignItems: 'center',
               borderRadius: 8,
               margin: 3.9,
               borderColor: 'black',

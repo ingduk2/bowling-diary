@@ -144,7 +144,7 @@ export default class ChartDay extends React.Component {
                 stroke: '#617982',
               },
             }}
-            bezier
+            // bezier
             style={{
               marginVertical: 1,
               alignItems: 'center',

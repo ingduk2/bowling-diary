@@ -16,18 +16,17 @@ export default class Chart extends React.Component {
     this.state = {
       currentYear,
       currentMonth,
-      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     };
   }
 
   render() {
-    console.log('render1');
+    console.log('render chart Year');
     // const nowDay = new Date();
 
     const { currentYear, currentMonth } = this.state;
     console.log(currentMonth);
 
-    const { data } = this.state;
+    const data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const { datas } = this.props;
 
     // console.log(datas);
@@ -46,14 +45,16 @@ export default class Chart extends React.Component {
 
     Object.values(datas).map((eachData) => {
       const dateObject = new Date(eachData.date);
-      const month = dateObject.getMonth();
-      //
-      countArr[Number(month)] += 1;
-      sumArr[Number(month)] += Number(eachData.score);
-      fullStats.low = Math.min(fullStats.low, Number(eachData.score));
-      fullStats.high = Math.max(fullStats.high, Number(eachData.score));
-      fullStats.sum += Number(eachData.score);
-      fullStats.cnt += 1;
+      if (dateObject.getFullYear() === currentYear) {
+        const month = dateObject.getMonth();
+        //
+        countArr[Number(month)] += 1;
+        sumArr[Number(month)] += Number(eachData.score);
+        fullStats.low = Math.min(fullStats.low, Number(eachData.score));
+        fullStats.high = Math.max(fullStats.high, Number(eachData.score));
+        fullStats.sum += Number(eachData.score);
+        fullStats.cnt += 1;
+      }
       return null;
     });
 
@@ -79,10 +80,18 @@ export default class Chart extends React.Component {
           <View style={styles.chartArrowWrapper}>
             <TouchableOpacity
               onPress={() => {
-                const beforeYear = Number(currentYear) - 1;
-                console.log(beforeYear);
+                // 왜 2020-7-08 되면 이상해지고 2020-07-08 되야 멀쩡하니 ㅡㅡ;;
+                const dateString = `${currentYear}-01-01`;
+                // console.log(dateString);
+                const dateObject = new Date(dateString);
+                // console.log(dateObject);
+                dateObject.setFullYear(dateObject.getFullYear() - 1);
+                // console.log(dateObject.getFullYear());
+                // console.log(dateObject.getMonth() + 1);
+                // console.log(dateObject.getDate());
+                // console.log(beforeDay);
                 this.setState({
-                  currentYear: beforeYear,
+                  currentYear: dateObject.getFullYear(),
                 });
               }}
             >
@@ -91,10 +100,18 @@ export default class Chart extends React.Component {
             <Text>{currentYear}년 차트</Text>
             <TouchableOpacity
               onPress={() => {
-                const afterYear = Number(currentYear) + 1;
-                console.log(afterYear);
+                // 왜 2020-7-08 되면 이상해지고 2020-07-08 되야 멀쩡하니 ㅡㅡ;;
+                const dateString = `${currentYear}-01-01`;
+                // console.log(dateString);
+                const dateObject = new Date(dateString);
+                // console.log(dateObject);
+                dateObject.setFullYear(dateObject.getFullYear() + 1);
+                // console.log(dateObject.getFullYear());
+                // console.log(dateObject.getMonth() + 1);
+                // console.log(dateObject.getDate());
+                // console.log(beforeDay);
                 this.setState({
-                  currentYear: afterYear,
+                  currentYear: dateObject.getFullYear(),
                 });
               }}
             >
@@ -135,7 +152,7 @@ export default class Chart extends React.Component {
                 stroke: '#617982',
               },
             }}
-            bezier
+            // bezier
             style={{
               marginVertical: 1,
               alignItems: 'center',

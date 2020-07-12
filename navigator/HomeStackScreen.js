@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable global-require */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, Linking, ScrollView, AsyncStorage, Alert } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Feather, AntDesign } from '@expo/vector-icons';
@@ -32,6 +32,10 @@ function LogoTitle() {
 }
 
 export default function HomeStackScreen() {
+  useEffect(() => {
+    console.log('HomeStackScreen useEfect');
+  }, []);
+
   const createTwoButtonAlert = () =>
     Alert.alert(
       '인스타그램 이동',
