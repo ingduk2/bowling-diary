@@ -9,7 +9,7 @@ import ScoreInput from '../components/ScoreInput';
 import WixCalendar from '../components/WixCalendar';
 import { seed } from '../uuid/uuidSeed';
 import ScoreList from '../components/ScoreList';
-import { useScoreData } from './ScoreLoad';
+import { loadScoreDatas, useScoreData } from './ScoreLoad';
 
 const HomeStack = createStackNavigator();
 
@@ -112,10 +112,20 @@ function HomeScreen() {
     day.length === 1 ? '0' : ''
   }${day}`;
 
-  // const [datas, setData] = useState({});
-  const [datas, setData] = useScoreData();
+  const [datas, setData] = useState({});
+  // const [datas, setData] = useScoreData();
   const [_score, setScore] = useState();
   const [_date, setDate] = useState(nowDate);
+
+  useEffect(() => {
+    console.log('ScoreLoads.useEffect');
+    const fetchData = async () => {
+      const loadDatas = await loadScoreDatas();
+      // console.log(articleData);
+      setData(loadDatas);
+    };
+    fetchData();
+  }, []);
 
   const Save = () => {
     const ID = uuidv1({

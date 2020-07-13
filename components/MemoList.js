@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { Entypo, Feather } from '@expo/vector-icons';
+import MemoThemecontext from '../context/MemoThemeContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,8 +25,10 @@ export default function MemoList(props) {
   const [newtitle, setNewTitle] = useState(title);
   const [newcontent, setNewContent] = useState(content);
   const createDate = new Date(createdAt).toLocaleString('ko-KR');
+
+  const { theme } = useContext(MemoThemecontext);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, theme === 'bright' ? styles.themeBright : styles.themeDark]}>
       <Modal
         animationType="slide"
         transparent
@@ -271,5 +274,11 @@ const styles = StyleSheet.create({
   },
   modalText: {
     textAlign: 'center',
+  },
+  themeBright: {
+    backgroundColor: 'white',
+  },
+  themeDark: {
+    backgroundColor: 'grey',
   },
 });

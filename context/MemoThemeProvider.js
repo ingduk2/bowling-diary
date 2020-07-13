@@ -6,9 +6,12 @@ import MemoThemeContext from './MemoThemeContext';
 const MemoThemeProvider = ({ children }) => {
   const changeTheme = () => {
     setMemoTheme((prevState) => {
+      const is = prevState.theme === 'bright';
+      const nextTheme = is ? 'dark' : 'bright';
       return {
         ...prevState,
-        theme: prevState.theme === 'bright' ? 'dark' : 'bright',
+        // theme: prevState.theme === 'bright' ? 'dark' : 'bright',
+        theme: nextTheme,
       };
     });
   };
