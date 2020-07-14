@@ -32,18 +32,6 @@ export default class RecentTable extends React.Component {
     const { tableHead, tableTitle, tableData } = this.state;
     const { datas } = this.props;
 
-    // 월 별로 만들어야함.
-    const sumArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const countArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-    const fullStats = {
-      low: 301,
-      high: 0,
-      sum: 0,
-      cnt: 0,
-      avg: 0,
-    };
-
     const stats3 = {
       low: 301,
       high: 0,
@@ -77,8 +65,9 @@ export default class RecentTable extends React.Component {
     let currentSum = 0;
     let currentCnt = 0;
 
-    for (let i = 0; i < 9; i += 1) {
+    for (let i = 0; i < sortedObject.length; i += 1) {
       if (sortedObject.length === 0) break;
+      if (sortedObject.length === 9) break;
       console.log(sortedObject[i].date, sortedObject[i].score);
       currentLow = Math.min(currentLow, Number(sortedObject[i].score));
       currentHigh = Math.max(currentHigh, Number(sortedObject[i].score));

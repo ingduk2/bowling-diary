@@ -17,51 +17,12 @@ const sections = [
   {
     data: [
       {
-        title: '로그인',
+        title: '오픈소스 정보',
         backgroundColor: RED,
-        iconType: 'AntDesign',
-        icon: 'user',
-        // eslint-disable-next-line no-use-before-define
-        func: settingNavigate,
-        screenName: 'Login',
-      },
-      {
-        title: '홈 설정',
-        backgroundColor: ORANGE,
-        iconType: 'AntDesign',
-        icon: 'home',
-        // eslint-disable-next-line no-use-before-define
-        func: settingNavigate,
-        screenName: 'HomeSettings',
-      },
-      {
-        title: '통계 설정',
-        backgroundColor: YELLOW,
-        iconType: 'AntDesign',
-        icon: 'forward',
-        // rightTitle: 'Off',
-        // eslint-disable-next-line no-use-before-define
-        func: settingNavigate,
-        screenName: 'StatsSettings',
-      },
-      {
-        title: '메모장 설정',
-        backgroundColor: GREEN,
-        iconType: 'AntDesign',
         icon: 'forward',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,
-        screenName: 'MemoSettings',
-      },
-      {
-        title: '앱 정보',
-        backgroundColor: BLUE,
-        iconType: 'AntDesign',
-        icon: 'forward',
-        // rightTitle: 'Off',
-        // eslint-disable-next-line no-use-before-define
-        func: settingNavigate,
-        screenName: 'AppInfo',
+        screenName: 'OpenSourceInfo',
       },
     ],
   },
@@ -72,19 +33,9 @@ function settingNavigate(name) {
   RootNavigation.navigate(name, {});
 }
 
-export default class Settings extends React.PureComponent {
+export default class AppInfo extends React.PureComponent {
   renderItem = ({
-    item: {
-      title,
-      backgroundColor,
-      iconType,
-      icon,
-      rightTitle,
-      hideChevron,
-      checkbox,
-      func,
-      screenName,
-    },
+    item: { title, backgroundColor, icon, rightTitle, hideChevron, checkbox, func, screenName },
   }) => (
     <ListItem
       containerStyle={{
@@ -100,7 +51,7 @@ export default class Settings extends React.PureComponent {
       rightTitle={rightTitle}
       onPress={() => func(screenName)}
       leftIcon={{
-        type: 'font-awesome',
+        type: 'AntDesign',
         name: icon,
         size: 30,
         color: 'white',

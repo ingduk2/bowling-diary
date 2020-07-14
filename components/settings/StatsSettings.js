@@ -1,21 +1,23 @@
 /* eslint-disable no-use-before-define */
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, Switch } from 'react-native';
-import { CheckBox } from 'react-native-elements';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, Text, Button, View, Switch, Dimensions } from 'react-native';
+import StatsThemeContext from '../../context/StatsThemeContext';
 
-// const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default function StatsSettings() {
-  const [isEnabled1, setIsEnabled1] = useState(false);
-  const [isEnabled2, setIsEnabled2] = useState(false);
-  const [isEnabled3, setIsEnabled3] = useState(false);
-  const [isEnabled4, setIsEnabled4] = useState(false);
-  const [isEnabled5, setIsEnabled5] = useState(false);
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
-  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
-  const toggleSwitch3 = () => setIsEnabled3((previousState) => !previousState);
-  const toggleSwitch4 = () => setIsEnabled4((previousState) => !previousState);
-  const toggleSwitch5 = () => setIsEnabled5((previousState) => !previousState);
+  const {
+    entireTableEnable,
+    recentTableEnable,
+    yearChartEnable,
+    monthChartEnable,
+    dayChartEnable,
+    toggleEntireTable,
+    toggleRecentTable,
+    toggleYearChart,
+    toggleMonthChart,
+    toggleDayChart,
+  } = useContext(StatsThemeContext);
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -23,50 +25,50 @@ export default function StatsSettings() {
         <Button title="전체 통계 On Off" />
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
-          thumbColor={isEnabled1 ? '#f4f3f4' : '#f4f3f4'}
+          thumbColor={entireTableEnable ? '#f4f3f4' : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch1}
-          value={isEnabled1}
+          onValueChange={toggleEntireTable}
+          value={entireTableEnable}
         />
       </View>
       <View style={styles.row}>
         <Button title="최근 통계 On Off" />
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
-          thumbColor={isEnabled2 ? '#f4f3f4' : '#f4f3f4'}
+          thumbColor={recentTableEnable ? '#f4f3f4' : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch2}
-          value={isEnabled2}
+          onValueChange={toggleRecentTable}
+          value={recentTableEnable}
         />
       </View>
       <View style={styles.row}>
         <Button title="년 차트 On Off" />
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
-          thumbColor={isEnabled3 ? '#f4f3f4' : '#f4f3f4'}
+          thumbColor={yearChartEnable ? '#f4f3f4' : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch3}
-          value={isEnabled3}
+          onValueChange={toggleYearChart}
+          value={yearChartEnable}
         />
       </View>
       <View style={styles.row}>
         <Button title="달 차트 On Off" />
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
-          thumbColor={isEnabled4 ? '#f4f3f4' : '#f4f3f4'}
+          thumbColor={monthChartEnable ? '#f4f3f4' : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch4}
-          value={isEnabled4}
+          onValueChange={toggleMonthChart}
+          value={monthChartEnable}
         />
       </View>
       <View style={styles.row}>
         <Button title="일 차트 On Off" />
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
-          thumbColor={isEnabled5 ? '#f4f3f4' : '#f4f3f4'}
+          thumbColor={dayChartEnable ? '#f4f3f4' : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch5}
-          value={isEnabled5}
+          onValueChange={toggleDayChart}
+          value={dayChartEnable}
         />
       </View>
     </View>

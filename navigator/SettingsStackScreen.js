@@ -7,6 +7,7 @@ import Login from '../components/settings/Login';
 import HomeSettings from '../components/settings/HomeSettings';
 import StatsSettings from '../components/settings/StatsSettings';
 import MemoSettings from '../components/settings/MemoSettings';
+import AppInfo from '../components/settings/AppInfo';
 import OpenSourceInfo from '../components/settings/OpenSourceInfo';
 
 const SettingsStack = createStackNavigator();
@@ -28,6 +29,7 @@ export default function SettingsStackScreen() {
       <SettingsStack.Screen name="HomeSettings" component={HomeSettings} />
       <SettingsStack.Screen name="StatsSettings" component={StatsSettings} />
       <SettingsStack.Screen name="MemoSettings" component={MemoSettings} />
+      <SettingsStack.Screen name="AppInfo" component={AppInfo} />
       <SettingsStack.Screen name="OpenSourceInfo" component={OpenSourceInfo} />
     </SettingsStack.Navigator>
   );

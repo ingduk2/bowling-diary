@@ -11,10 +11,12 @@ import {
   Alert,
   Modal,
   TouchableHighlight,
+  Platform,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { Entypo, Feather } from '@expo/vector-icons';
 import MemoThemecontext from '../context/MemoThemeContext';
+import { numberAppendZero } from '../constants/const';
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,8 +26,32 @@ export default function MemoList(props) {
   const { id, title, content, createdAt, deleteMemo, updateMemo } = props;
   const [newtitle, setNewTitle] = useState(title);
   const [newcontent, setNewContent] = useState(content);
-  const createDate = new Date(createdAt).toLocaleString('ko-KR');
+  let createDate = null;
+  if (Platform.OS === 'ios') {
+    createDate = new Date(createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+  } else {
+    const nowDay = new Date(createdAt);
+    const year = nowDay.getFullYear().toString();
+    const month = (nowDay.getMonth() + 1).toString();
+    const day = nowDay.getDate().toString();
+    let hour = nowDay.getHours();
+    const minute = numberAppendZero(nowDay.getMinutes());
+    const second = numberAppendZero(nowDay.getSeconds());
+    let isAM = false;
+    if (hour > 12) {
+      isAM = false;
+      hour -= 12;
+    } else {
+      isAM = true;
+    }
 
+    const nowDate = `${year}.${month.length === 1 ? '0' : ''}${month}.${
+      day.length === 1 ? '0' : ''
+    }${day}. ${isAM ? '오전' : '오후'} ${hour}:${minute}:${second}`;
+
+    createDate = nowDate;
+  }
+  console.log(createDate);
   const { theme } = useContext(MemoThemecontext);
   return (
     <View style={[styles.container, theme === 'bright' ? styles.themeBright : styles.themeDark]}>

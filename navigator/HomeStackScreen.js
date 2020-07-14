@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable global-require */
 import React, { useState, useEffect } from 'react';
-import { View, Image, Linking, ScrollView, AsyncStorage, Alert } from 'react-native';
+import { View, Image, Linking, ScrollView, AsyncStorage, Alert, Dimensions } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { v1 as uuidv1 } from 'uuid';
@@ -11,6 +11,7 @@ import { seed } from '../uuid/uuidSeed';
 import ScoreList from '../components/ScoreList';
 import { loadScoreDatas, useScoreData } from './ScoreLoad';
 
+const { width, height } = Dimensions.get('window');
 const HomeStack = createStackNavigator();
 
 function LogoTitle() {
@@ -208,9 +209,9 @@ function HomeScreen() {
         backgroundColor: '#fff',
       }}
     >
-      <View>
+      <View style={{ flex: 1 }}>
         <ScrollView>
-          <WixCalendar saveDate={saveDate} datas={datas} nowDate={nowDate} />
+          <WixCalendar style={{ height }} saveDate={saveDate} datas={datas} nowDate={nowDate} />
         </ScrollView>
         <ScoreInput saveScore={saveScore} addScoreData={addScoreData} />
       </View>

@@ -116,7 +116,7 @@ export default class WixCalendar extends Component {
     // console.log("============", markedObject);
 
     return (
-      <View style={{ paddingTop: 10, flex: 1 }}>
+      <View style={{ paddingTop: 1, flex: 1 }}>
         <Calendar
           // dayComponent={({date, state}) => {
           //     return (

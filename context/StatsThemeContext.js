@@ -1,8 +1,16 @@
 import { createContext } from 'react';
 
 const StatsThemeContext = createContext({
-  theme: 'bright',
-  changeTheme: () => {},
+  entireTableEnable: true,
+  recentTableEnable: true,
+  yearChartEnable: true,
+  monthChartEnable: true,
+  dayChartEnable: true,
+  toggleEntireTable: () => {},
+  toggleRecentTable: () => {},
+  toggleYearChart: () => {},
+  toggleMonthChart: () => {},
+  toggleDayChart: () => {},
 });
 
 export default StatsThemeContext;
