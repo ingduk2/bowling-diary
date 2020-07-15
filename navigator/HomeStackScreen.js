@@ -205,11 +205,11 @@ function HomeScreen() {
     <View
       style={{
         flex: 1,
-        padding: 2,
+        // padding: 1,
         backgroundColor: '#fff',
       }}
     >
-      <View style={{ flex: 1 }}>
+      <View style={{}}>
         <ScrollView>
           <WixCalendar style={{ height }} saveDate={saveDate} datas={datas} nowDate={nowDate} />
         </ScrollView>

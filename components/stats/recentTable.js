@@ -13,13 +13,13 @@ export default class RecentTable extends React.Component {
     this.state = {
       tableHead: ['', 'low', 'high', 'avg'],
 
-      tableTitle: ['3 게임', '6 게임', '9 게임', '-', '-'],
+      tableTitle: ['3 게임', '6 게임', '9 게임'],
       tableData: [
         ['100', '200', '180'],
         ['100', '200', '180'],
         ['100', '200', '180'],
-        ['-', '-', '-'],
-        ['-', '-', '-'],
+        // ['-', '-', '],
+        // ['-', '-', '-'],
       ],
     };
   }
@@ -33,7 +33,7 @@ export default class RecentTable extends React.Component {
     const { datas } = this.props;
 
     const stats3 = {
-      low: 301,
+      low: 0,
       high: 0,
       sum: 0,
       cnt: 0,
@@ -41,7 +41,7 @@ export default class RecentTable extends React.Component {
     };
 
     const stats6 = {
-      low: 301,
+      low: 0,
       high: 0,
       sum: 0,
       cnt: 0,
@@ -49,7 +49,7 @@ export default class RecentTable extends React.Component {
     };
 
     const stats9 = {
-      low: 301,
+      low: 0,
       high: 0,
       sum: 0,
       cnt: 0,
@@ -57,6 +57,11 @@ export default class RecentTable extends React.Component {
     };
 
     const sortedObject = Object.values(datas).sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      if (dateA === dateB) {
+        return b.createdAt - a.createdAt;
+      }
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 
@@ -67,7 +72,6 @@ export default class RecentTable extends React.Component {
 
     for (let i = 0; i < sortedObject.length; i += 1) {
       if (sortedObject.length === 0) break;
-      if (sortedObject.length === 9) break;
       console.log(sortedObject[i].date, sortedObject[i].score);
       currentLow = Math.min(currentLow, Number(sortedObject[i].score));
       currentHigh = Math.max(currentHigh, Number(sortedObject[i].score));
@@ -81,10 +85,10 @@ export default class RecentTable extends React.Component {
         stats3.high = currentHigh;
         stats3.avg = Math.round(currentSum / currentCnt);
 
-        currentLow = 301;
-        currentHigh = 0;
-        currentCnt = 0;
-        currentSum = 0;
+        // currentLow = 301;
+        // currentHigh = 0;
+        // currentCnt = 0;
+        // currentSum = 0;
       } else if (i === 5) {
         // console.log(sortedObject[i].date, sortedObject[i].score);
         // console.log(currentLow, currentHigh, currentCnt, currentSum);
@@ -92,10 +96,10 @@ export default class RecentTable extends React.Component {
         stats6.low = currentLow;
         stats6.high = currentHigh;
         stats6.avg = Math.round(currentSum / currentCnt);
-        currentLow = 301;
-        currentHigh = 0;
-        currentCnt = 0;
-        currentSum = 0;
+        // currentLow = 301;
+        // currentHigh = 0;
+        // currentCnt = 0;
+        // currentSum = 0;
       } else if (i === 8) {
         // console.log(sortedObject[i].date, sortedObject[i].score);
         // console.log(currentLow, currentHigh, currentCnt, currentSum);
@@ -103,10 +107,10 @@ export default class RecentTable extends React.Component {
         stats9.low = currentLow;
         stats9.high = currentHigh;
         stats9.avg = Math.round(currentSum / currentCnt);
-        currentLow = 301;
-        currentHigh = 0;
-        currentCnt = 0;
-        currentSum = 0;
+        // currentLow = 301;
+        // currentHigh = 0;
+        // currentCnt = 0;
+        // currentSum = 0;
       }
     }
     // console.log(stats3, stats6, stats9);

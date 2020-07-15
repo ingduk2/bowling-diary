@@ -59,7 +59,11 @@ export default class EntireTable extends React.Component {
     fullStatsArr.push(fullStats.avg); // avg
 
     for (let i = 0; i < 3; i += 1) {
-      fullTableData[0][i] = fullStatsArr[i];
+      if (fullStats.cnt === 0) {
+        fullTableData[0][i] = 0;
+      } else {
+        fullTableData[0][i] = fullStatsArr[i];
+      }
     }
     fullTableTitle[0] = `${fullStats.cnt} 게임`;
 

@@ -20,9 +20,9 @@ export default function StatsSettings() {
   } = useContext(StatsThemeContext);
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center' }}>
       <View style={styles.row}>
-        <Button title="전체 통계 On Off" />
+        <Text style={styles.textStyle}>전체 통계 On Off</Text>
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
           thumbColor={entireTableEnable ? '#f4f3f4' : '#f4f3f4'}
@@ -32,7 +32,7 @@ export default function StatsSettings() {
         />
       </View>
       <View style={styles.row}>
-        <Button title="최근 통계 On Off" />
+        <Text style={styles.textStyle}>최근 통계 On Off</Text>
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
           thumbColor={recentTableEnable ? '#f4f3f4' : '#f4f3f4'}
@@ -42,7 +42,7 @@ export default function StatsSettings() {
         />
       </View>
       <View style={styles.row}>
-        <Button title="년 차트 On Off" />
+        <Text style={styles.textStyle}>년 차트 On Off</Text>
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
           thumbColor={yearChartEnable ? '#f4f3f4' : '#f4f3f4'}
@@ -52,7 +52,7 @@ export default function StatsSettings() {
         />
       </View>
       <View style={styles.row}>
-        <Button title="달 차트 On Off" />
+        <Text style={styles.textStyle}>달 차트 On Off</Text>
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
           thumbColor={monthChartEnable ? '#f4f3f4' : '#f4f3f4'}
@@ -62,7 +62,7 @@ export default function StatsSettings() {
         />
       </View>
       <View style={styles.row}>
-        <Button title="일 차트 On Off" />
+        <Text style={styles.textStyle}>일 차트 On Off</Text>
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
           thumbColor={dayChartEnable ? '#f4f3f4' : '#f4f3f4'}
@@ -85,6 +85,18 @@ const styles = StyleSheet.create({
   head: { height: 40, backgroundColor: '#f1f8ff' },
   mainText: { margin: 6, height: 40, fontSize: 30 },
   row: {
+    width,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: '#bbb',
+    alignItems: 'center',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    padding: 8,
+    // margin: 10,
+  },
+  textStyle: {
+    fontWeight: '500',
+    fontSize: 18,
+    marginVertical: 15,
   },
 });

@@ -18,7 +18,7 @@ const sections = [
     data: [
       {
         title: '로그인',
-        backgroundColor: RED,
+        // backgroundColor: RED,
         iconType: 'AntDesign',
         icon: 'user',
         // eslint-disable-next-line no-use-before-define
@@ -27,7 +27,7 @@ const sections = [
       },
       {
         title: '홈 설정',
-        backgroundColor: ORANGE,
+        // backgroundColor: ORANGE,
         iconType: 'AntDesign',
         icon: 'home',
         // eslint-disable-next-line no-use-before-define
@@ -36,9 +36,9 @@ const sections = [
       },
       {
         title: '통계 설정',
-        backgroundColor: YELLOW,
+        // backgroundColor: YELLOW,
         iconType: 'AntDesign',
-        icon: 'forward',
+        icon: 'bar-chart-o',
         // rightTitle: 'Off',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,
@@ -46,18 +46,18 @@ const sections = [
       },
       {
         title: '메모장 설정',
-        backgroundColor: GREEN,
+        // backgroundColor: GREEN,
         iconType: 'AntDesign',
-        icon: 'forward',
+        icon: 'sticky-note-o',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,
         screenName: 'MemoSettings',
       },
       {
         title: '앱 정보',
-        backgroundColor: BLUE,
+        // backgroundColor: BLUE,
         iconType: 'AntDesign',
-        icon: 'forward',
+        icon: 'info',
         // rightTitle: 'Off',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,
@@ -88,7 +88,7 @@ export default class Settings extends React.PureComponent {
   }) => (
     <ListItem
       containerStyle={{
-        paddingVertical: 8,
+        paddingVertical: 13,
       }}
       switch={
         checkbox && {
@@ -102,13 +102,13 @@ export default class Settings extends React.PureComponent {
       leftIcon={{
         type: 'font-awesome',
         name: icon,
-        size: 30,
-        color: 'white',
+        size: 20,
+        // color: 'white',
         containerStyle: {
-          backgroundColor,
-          width: 30,
-          height: 30,
-          borderRadius: 6,
+          backgroundColor: '',
+          width: 29,
+          height: 29,
+          borderRadius: 10,
           alignItems: 'center',
           justifyContent: 'center',
         },

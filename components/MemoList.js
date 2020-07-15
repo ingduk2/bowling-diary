@@ -73,8 +73,8 @@ export default function MemoList(props) {
               editable
               underlineColorAndroid="transparent"
               // keyboardType='numeric'
-              // maxLength={3}
-              // returnKeyType={"done"}
+              maxLength={11}
+              returnKeyType="done"
               multiline
               autoCorrect={false}
               onChangeText={setNewTitle}
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   },
 
   modalTitle: {
-    width: width / 2,
+    width: width / 1.5,
     borderColor: 'black',
     padding: 2,
     margin: 10,
@@ -253,14 +253,14 @@ const styles = StyleSheet.create({
     // justifyContent: 'center'
   },
   modalContent: {
-    width: width / 2,
+    width: width / 1.5,
     height: height / 10,
     borderColor: 'black',
     padding: 2,
     margin: 10,
     borderBottomColor: '#bbb',
     borderBottomWidth: 1,
-    fontSize: 25,
+    fontSize: 10,
     // alignItems : 'center',
     textAlign: 'center',
     // justifyContent: 'center'

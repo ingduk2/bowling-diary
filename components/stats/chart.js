@@ -3,6 +3,8 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import PropTypes from 'prop-types';
+import { Tooltip, Text as TooltipText } from 'react-native-elements';
+import { AntDesign } from '@expo/vector-icons';
 import { getYearYYYY, getMonthMM, numberAppendZero } from '../../constants/const';
 
 const { width } = Dimensions.get('window');
@@ -97,7 +99,18 @@ export default class Chart extends React.Component {
             >
               <Text style={styles.chartArrow}>&lt;</Text>
             </TouchableOpacity>
-            <Text>{currentYear}년 차트</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontSize: 16 }}>{currentYear}년 차트</Text>
+              <View style={{ paddingLeft: 10 }}>
+                <Tooltip
+                  width={300}
+                  backgroundColor="#eaf8fd"
+                  popover={<Text style={{}}>년 차트로서 한 달의 에버리지를 보여줍니다.</Text>}
+                >
+                  <AntDesign name="questioncircleo" size={24} color="black" />
+                </Tooltip>
+              </View>
+            </View>
             <TouchableOpacity
               onPress={() => {
                 // 왜 2020-7-08 되면 이상해지고 2020-07-08 되야 멀쩡하니 ㅡㅡ;;

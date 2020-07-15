@@ -65,6 +65,7 @@ export default function App() {
               tabBarOptions={{
                 activeTintColor: 'black',
                 inactiveTintColor: 'gray',
+                keyboardHidesTabBar: true,
               }}
             >
               <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home' }} />

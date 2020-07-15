@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
 import { StyleSheet, View, TextInput, Dimensions } from 'react-native';
-import { FontAwesome5, AntDesign } from '@expo/vector-icons';
+import { FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { Rating, AirbnbRating } from 'react-native-elements';
 
@@ -31,7 +31,7 @@ export default class ScoreInput extends React.Component {
             style={styles.input}
             placeholder="Score"
             underlineColorAndroid="transparent"
-            keyboardType="numeric"
+            keyboardType="number-pad"
             maxLength={3}
             returnKeyType="done"
             // onBlur={this._inputScore}
@@ -49,6 +49,9 @@ export default class ScoreInput extends React.Component {
               });
             }}
           />
+
+          <MaterialIcons name="place" size={40} color="black" />
+          <TextInput style={styles.input} placeholder="장소" underlineColorAndroid="transparent" />
           <AntDesign
             name="enter"
             size={35}
@@ -69,13 +72,13 @@ export default class ScoreInput extends React.Component {
             alignItems: 'center',
           }}
         >
-          <Rating
+          {/* <Rating
             type="heart"
             ratingCount={5}
             imageSize={50}
             showRating={false}
             onFinishRating={this.ratingCompleted}
-          />
+          /> */}
         </View>
       </View>
     );

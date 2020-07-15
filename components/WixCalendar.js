@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Dimensions, Platform } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import PropTypes from 'prop-types';
+const { width, height } = Dimensions.get('window');
 
 LocaleConfig.locales.fr = {
   monthNames: [
@@ -116,8 +117,43 @@ export default class WixCalendar extends Component {
     // console.log("============", markedObject);
 
     return (
-      <View style={{ paddingTop: 1, flex: 1 }}>
+      <View style={{ paddingTop: 1 }}>
         <Calendar
+          style={{
+            // padding: 0,
+            borderWidth: 1,
+            borderColor: 'gray',
+            // backgroundColor: 'grey',
+            // height: 340,
+          }}
+          theme={{
+            'stylesheet.calendar.header': {
+              header: {
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingLeft: 10,
+                paddingRight: 10,
+                // marginTop: 1,
+                alignItems: 'center',
+              },
+              week: {
+                // marginTop: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingLeft: 10,
+                paddingRight: 10,
+              },
+            },
+            // textDayFontSize: 16,
+            // textMonthFontSize: 16,
+            // textDayHeaderFontSize: 16,
+            'stylesheet.day.basic': {
+              text: {
+                marginTop: Platform.OS === 'android' ? 1 : 1,
+              },
+            },
+          }}
           // dayComponent={({date, state}) => {
           //     return (
           //       <View>

@@ -18,7 +18,7 @@ const sections = [
     data: [
       {
         title: '오픈소스 정보',
-        backgroundColor: RED,
+        // backgroundColor: RED,
         icon: 'forward',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,
@@ -54,7 +54,7 @@ export default class AppInfo extends React.PureComponent {
         type: 'AntDesign',
         name: icon,
         size: 30,
-        color: 'white',
+        // color: 'white',
         containerStyle: {
           backgroundColor,
           width: 30,
