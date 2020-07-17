@@ -11,6 +11,7 @@ import HomeStackScreen from './navigator/HomeStackScreen';
 import StatsStackScreen from './navigator/StatsStackScreen';
 import MemosStackScreen from './navigator/MemosStackScreen';
 import SettingsStackScreen from './navigator/SettingsStackScreen';
+import HomeThemeProvider from './context/HomeThemeProvider';
 import MemoThemeProvider from './context/MemoThemeProvider';
 import StatsThemeProvider from './context/StatsThemeProvider';
 
@@ -38,48 +39,58 @@ export default function App() {
 
   if (isReady) {
     return (
-      <MemoThemeProvider>
-        <StatsThemeProvider>
-          <NavigationContainer ref={navigationRef}>
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color }) => {
-                  let iconTag;
-                  if (route.name === 'Home') {
-                    iconTag = focused ? (
-                      <Ionicons name="md-home" size={40} color={color} />
-                    ) : (
-                      <Ionicons name="md-home" size={40} color={color} />
-                    );
-                  } else if (route.name === 'Settings') {
-                    // iconName = focused ? 'ios-list-box' : 'ios-list';
-                    iconTag = <Ionicons name="ios-list" size={40} color={color} />;
-                  } else if (route.name === 'Stats') {
-                    iconTag = <Ionicons name="md-stats" size={40} color={color} />;
-                  } else if (route.name === 'Memos') {
-                    iconTag = <FontAwesome name="sticky-note-o" size={40} color={color} />;
-                  }
-                  return iconTag;
-                },
-              })}
-              tabBarOptions={{
-                activeTintColor: 'black',
-                inactiveTintColor: 'gray',
-                keyboardHidesTabBar: true,
-              }}
-            >
-              <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home' }} />
-              <Tab.Screen name="Stats" component={StatsStackScreen} options={{ title: 'Stats' }} />
-              <Tab.Screen name="Memos" component={MemosStackScreen} options={{ title: 'Memos' }} />
-              <Tab.Screen
-                name="Settings"
-                component={SettingsStackScreen}
-                options={{ title: 'Settings' }}
-              />
-            </Tab.Navigator>
-          </NavigationContainer>
-        </StatsThemeProvider>
-      </MemoThemeProvider>
+      <HomeThemeProvider>
+        <MemoThemeProvider>
+          <StatsThemeProvider>
+            <NavigationContainer ref={navigationRef}>
+              <Tab.Navigator
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color }) => {
+                    let iconTag;
+                    if (route.name === 'Home') {
+                      iconTag = focused ? (
+                        <Ionicons name="md-home" size={40} color={color} />
+                      ) : (
+                        <Ionicons name="md-home" size={40} color={color} />
+                      );
+                    } else if (route.name === 'Settings') {
+                      // iconName = focused ? 'ios-list-box' : 'ios-list';
+                      iconTag = <Ionicons name="ios-list" size={40} color={color} />;
+                    } else if (route.name === 'Stats') {
+                      iconTag = <Ionicons name="md-stats" size={40} color={color} />;
+                    } else if (route.name === 'Memos') {
+                      iconTag = <FontAwesome name="sticky-note-o" size={40} color={color} />;
+                    }
+                    return iconTag;
+                  },
+                })}
+                tabBarOptions={{
+                  activeTintColor: 'black',
+                  inactiveTintColor: 'gray',
+                  keyboardHidesTabBar: true,
+                }}
+              >
+                <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home' }} />
+                <Tab.Screen
+                  name="Stats"
+                  component={StatsStackScreen}
+                  options={{ title: 'Stats' }}
+                />
+                <Tab.Screen
+                  name="Memos"
+                  component={MemosStackScreen}
+                  options={{ title: 'Memos' }}
+                />
+                <Tab.Screen
+                  name="Settings"
+                  component={SettingsStackScreen}
+                  options={{ title: 'Settings' }}
+                />
+              </Tab.Navigator>
+            </NavigationContainer>
+          </StatsThemeProvider>
+        </MemoThemeProvider>
+      </HomeThemeProvider>
     );
   }
   return (

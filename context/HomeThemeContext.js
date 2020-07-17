@@ -1,8 +1,8 @@
 import { createContext } from 'react';
 
 const HomeThemeContext = createContext({
-  theme: 'bright',
-  changeTheme: () => {},
+  locationInputEnable: true,
+  toggleLocationInput: () => {},
 });
 
 export default HomeThemeContext;

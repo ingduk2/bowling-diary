@@ -1,24 +1,25 @@
 /* eslint-disable no-use-before-define */
-import * as React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, Text, View, ScrollView, Switch } from 'react-native';
+import HomeThemeContext from '../../context/HomeThemeContext';
+import styles from './style';
 
 // const { width, height } = Dimensions.get('window');
 
 export default function HomeSettings() {
+  const { locationInputEnable, toggleLocationInput } = useContext(HomeThemeContext);
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>HomeSettings</Text>
+    <View style={{ flex: 1, alignItems: 'center' }}>
+      <View style={styles.row}>
+        <Text style={styles.textStyle}>장소 입력 사용</Text>
+        <Switch
+          trackColor={{ false: '#767577', true: 'green' }}
+          thumbColor={locationInputEnable ? '#f4f3f4' : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleLocationInput}
+          value={locationInputEnable}
+        />
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    paddingTop: 30,
-    backgroundColor: '#fff',
-  },
-  head: { height: 40, backgroundColor: '#f1f8ff' },
-  mainText: { margin: 6, height: 40, fontSize: 30 },
-});

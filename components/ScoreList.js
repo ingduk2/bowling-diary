@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 const { width } = Dimensions.get('window');
 
 export default function ScoreList(props) {
-  console.log(props);
+  // console.log(ScoreList, props);
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const { deleteScoreData, updateScoreData, id, date, score } = props;
@@ -98,10 +98,10 @@ export default function ScoreList(props) {
       </Modal>
 
       <View style={styles.column}>
-        <Entypo style={styles.dot} name="dot-single" size={24} color="black" />
-        <Text style={styles.text}>
-          {date} ( {score} 점 ){' '}
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Entypo style={styles.dot} name="dot-single" size={24} color="black" />
+          <Text style={styles.text}>오란다볼링파크 {score} 점 </Text>
+        </View>
 
         {isEditing ? (
           <View style={styles.actions}>
@@ -146,12 +146,16 @@ ScoreList.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  date: {
+    fontWeight: '700',
+    fontSize: 20,
+  },
   dot: {
-    marginRight: 20,
+    marginRight: 10,
   },
   container: {
     // backgroundColor : "#bbb",
-    width: width - width / 9,
+    width,
     borderBottomColor: '#bbb',
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
@@ -175,7 +179,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 15,
     marginVertical: 15,
-    width: width / 2 + 40,
+    // width: width / 2 + 40,
   },
   completedText: {
     color: '#bbb',
@@ -186,7 +190,7 @@ const styles = StyleSheet.create({
   },
   column: {
     // backgroundColor : "#bbb",
-    // justifyContent: "space-between",
+    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     width,

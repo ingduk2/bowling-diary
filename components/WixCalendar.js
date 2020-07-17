@@ -86,7 +86,7 @@ export default class WixCalendar extends Component {
         dots: [{ key: 'game', color: 'red', selectedDotColor: 'red' }],
       };
       if (selected === data.date) {
-        console.log('same date!!!!!!!!!!!!');
+        // console.log('same date!!!!!!!!!!!!');
         // 합쳐야함.
         eachDate[data.date] = {
           ...clicked,
@@ -121,7 +121,7 @@ export default class WixCalendar extends Component {
         <Calendar
           style={{
             // padding: 0,
-            borderWidth: 1,
+            // borderWidth: 1,
             borderColor: 'gray',
             // backgroundColor: 'grey',
             // height: 340,

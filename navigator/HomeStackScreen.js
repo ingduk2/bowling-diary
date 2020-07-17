@@ -1,7 +1,17 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable global-require */
 import React, { useState, useEffect } from 'react';
-import { View, Image, Linking, ScrollView, AsyncStorage, Alert, Dimensions } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  Linking,
+  ScrollView,
+  AsyncStorage,
+  Alert,
+  Dimensions,
+  Button,
+} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { v1 as uuidv1 } from 'uuid';
@@ -117,6 +127,10 @@ function HomeScreen() {
   // const [datas, setData] = useScoreData();
   const [_score, setScore] = useState();
   const [_date, setDate] = useState(nowDate);
+  console.log('HomeScreen', _date);
+  const [_place, setPlace] = useState();
+  // const { locationInputEnable } = useContext(HomeThemeContext);
+  const [calandarEnable, setCalandarEnable] = useState(true);
 
   useEffect(() => {
     console.log('ScoreLoads.useEffect');
@@ -150,8 +164,13 @@ function HomeScreen() {
     setScore(score);
   };
 
+  const savePlace = (place) => {
+    setPlace(place);
+  };
+
   const saveDate = (date) => {
     setDate(date);
+    console.log(date);
   };
 
   const addScoreData = () => {
@@ -209,12 +228,52 @@ function HomeScreen() {
         backgroundColor: '#fff',
       }}
     >
-      <View style={{}}>
-        <ScrollView>
-          <WixCalendar style={{ height }} saveDate={saveDate} datas={datas} nowDate={nowDate} />
-        </ScrollView>
-        <ScoreInput saveScore={saveScore} addScoreData={addScoreData} />
+      <View style={{ backgroundColor: 'white' }}>
+        {calandarEnable === true && (
+          <ScrollView>
+            <WixCalendar style={{ height }} saveDate={saveDate} datas={datas} nowDate={_date} />
+          </ScrollView>
+        )}
+        {calandarEnable === true && (
+          <View style={{ alignItems: 'flex-start' }}>
+            <AntDesign
+              style={{ backgroundColor: 'yellow' }}
+              name="caretup"
+              size={20}
+              color="black"
+              onPress={() => {
+                setCalandarEnable(!calandarEnable);
+              }}
+            />
+          </View>
+        )}
+
+        {calandarEnable === false && (
+          <View style={{ alignItems: 'flex-start' }}>
+            <AntDesign
+              // style={{}}
+              name="caretdown"
+              size={20}
+              color="black"
+              onPress={() => {
+                setCalandarEnable(!calandarEnable);
+              }}
+            />
+          </View>
+        )}
+        <ScoreInput saveScore={saveScore} addScoreData={addScoreData} savePlace={savePlace} />
       </View>
+      <Text
+        style={{
+          alignSelf: 'flex-start',
+          paddingLeft: 10,
+          paddingVertical: 10,
+          fontWeight: '700',
+          fontSize: 20,
+        }}
+      >
+        {_date}
+      </Text>
       <View style={{ flex: 1 }}>
         <ScrollView
           contentContainerStyle={{

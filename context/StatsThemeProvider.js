@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
-import StatsThemeContext from './StatsThemeContext';
 import { AsyncStorage } from 'react-native';
+import StatsThemeContext from './StatsThemeContext';
 
 export async function loadStatsThemeDatas() {
   let statsThemeDatas = {};
