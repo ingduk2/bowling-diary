@@ -18,6 +18,7 @@ import { FloatingAction } from 'react-native-floating-action';
 import { v1 as uuidv1 } from 'uuid';
 import MemoList from '../components/MemoList';
 import { seed } from '../uuid/uuidSeed';
+import MemoModal from '../components/modal/MemoModal';
 
 const { width, height } = Dimensions.get('window');
 const MsmosStack = createStackNavigator();
@@ -54,6 +55,9 @@ function MemosScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [modalState, setModalState] = useState('');
+  const [_id, setId] = useState('');
+  console.log('MemosScreen', modalVisible);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,17 +69,18 @@ function MemosScreen() {
     fetchData();
   }, []);
 
-  const addMemo = () => {
+  const addMemo = (memo) => {
+    const { newTitle, newContent } = memo;
     const ID = uuidv1({ random: seed() });
     const newMemo = {
       [ID]: {
         id: ID,
-        title,
-        content,
+        title: newTitle,
+        content: newContent,
         createdAt: Date.now(),
       },
     };
-
+    console.log(newMemo);
     const newMemos = {
       ...memos,
       ...newMemo,
@@ -94,10 +99,10 @@ function MemosScreen() {
   };
 
   const updateMemo = (memo) => {
-    const { id, newtitle, newcontent } = memo;
+    const { id, newTitle, newContent } = memo;
     const newMemos = {
       ...memos,
-      [id]: { ...memos[id], title: newtitle, content: newcontent },
+      [id]: { ...memos[id], title: newTitle, content: newContent },
     };
     saveMemosData(newMemos);
     setMemos(newMemos);
@@ -110,7 +115,17 @@ function MemosScreen() {
 
   return (
     <View style={{ flex: 1, padding: 2, backgroundColor: '#fff' }}>
-      <Modal
+      <MemoModal
+        id={_id}
+        modalState={modalState}
+        title={title}
+        content={content}
+        addMemo={addMemo}
+        updateMemo={updateMemo}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+      {/* <Modal
         animationType="slide"
         transparent
         visible={modalVisible}
@@ -174,7 +189,7 @@ function MemosScreen() {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       {/* <Memos/> */}
       <View>
@@ -198,8 +213,19 @@ function MemosScreen() {
               memo.content.includes(searchValue)
             ) {
               return (
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                <MemoList key={memo.id} deleteMemo={deleteMemo} updateMemo={updateMemo} {...memo} />
+                <MemoList
+                  key={memo.id}
+                  setId={setId}
+                  deleteMemo={deleteMemo}
+                  updateMemo={updateMemo}
+                  setContent={setContent}
+                  setTitle={setTitle}
+                  modalVisible={modalVisible}
+                  setModalVisible={setModalVisible}
+                  setModalState={setModalState}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...memo}
+                />
               );
             }
 
@@ -218,6 +244,7 @@ function MemosScreen() {
           console.log('onPress');
           setTitle('');
           setContent('');
+          setModalState('add');
           setModalVisible(!modalVisible);
         }}
         onPressItem={(name) => {

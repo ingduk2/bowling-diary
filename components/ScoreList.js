@@ -12,7 +12,8 @@ import {
   Modal,
   TouchableHighlight,
 } from 'react-native';
-import { Entypo, Feather } from '@expo/vector-icons';
+import { Rating, AirbnbRating } from 'react-native-elements';
+import { Entypo, Feather, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 const { width } = Dimensions.get('window');
@@ -21,9 +22,10 @@ export default function ScoreList(props) {
   // console.log(ScoreList, props);
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const { deleteScoreData, updateScoreData, id, date, score } = props;
+  const { deleteScoreData, updateScoreData, id, date, score, place, condition } = props;
   const [newScore, setNewScore] = useState(score);
-
+  const [newPlace, setNewPlace] = useState(place);
+  const [newCondition, setNewCondition] = useState(condition);
   const startEditing = () => {
     // setIsEditing(true);
     setModalVisible(true);
@@ -48,9 +50,9 @@ export default function ScoreList(props) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>점수 수정</Text>
+            <Text style={styles.modalText}>수정</Text>
             <TextInput
-              style={styles.modalInput}
+              style={styles.modalInputScore}
               placeholder="Score"
               value={newScore}
               editable
@@ -67,6 +69,27 @@ export default function ScoreList(props) {
                 }
                 setNewScore(returnScore);
               }}
+            />
+            <TextInput
+              value={newPlace}
+              style={styles.modalInputPlace}
+              placeholder="Place"
+              multiline
+              blurOnSubmit
+              returnKeyType="done"
+              maxLength={10}
+              underlineColorAndroid="transparent"
+              onChangeText={(text) => {
+                setNewPlace(text);
+              }}
+            />
+            <Rating
+              type="heart"
+              ratingCount={5}
+              imageSize={40}
+              startingValue={newCondition}
+              // showRating
+              onFinishRating={(rating) => setNewCondition(rating)}
             />
             <View style={styles.actions}>
               <TouchableHighlight
@@ -87,7 +110,7 @@ export default function ScoreList(props) {
                 onPress={() => {
                   setModalVisible(!modalVisible);
                   // update Score...
-                  updateScoreData(id, newScore);
+                  updateScoreData(id, newScore, newPlace, newCondition);
                 }}
               >
                 <Text style={styles.textStyle}>ok</Text>
@@ -100,7 +123,16 @@ export default function ScoreList(props) {
       <View style={styles.column}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Entypo style={styles.dot} name="dot-single" size={24} color="black" />
-          <Text style={styles.text}>오란다볼링파크 {score} 점 </Text>
+          {/* <Text style={styles.text}>
+            [{place}] {score} 점 ({condition})
+          </Text> */}
+          <MaterialIcons name="place" size={30} color="black" />
+          <Text style={styles.text}>{place}</Text>
+          <FontAwesome5 name="bowling-ball" size={24} />
+          <Text style={styles.text}>{score}점</Text>
+
+          <FontAwesome name="heartbeat" size={24} color="black" />
+          <Text style={styles.text}>{condition}</Text>
         </View>
 
         {isEditing ? (
@@ -142,11 +174,13 @@ ScoreList.propTypes = {
   deleteScoreData: PropTypes.func.isRequired,
   updateScoreData: PropTypes.func.isRequired,
   score: PropTypes.string.isRequired,
+  place: PropTypes.string.isRequired,
+  condition: PropTypes.number.isRequired,
   date: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({
-  date: {
+  textDate: {
     fontWeight: '700',
     fontSize: 20,
   },
@@ -176,9 +210,11 @@ const styles = StyleSheet.create({
     borderColor: '#F23657',
   },
   text: {
+    width: width / 6,
     fontWeight: '500',
     fontSize: 15,
     marginVertical: 15,
+    paddingRight: 20,
     // width: width / 2 + 40,
   },
   completedText: {
@@ -203,7 +239,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
 
-  modalInput: {
+  modalInputScore: {
     width: width / 4.5,
     borderColor: 'black',
     padding: 2,
@@ -212,6 +248,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 25,
     // alignItems : 'center',
+    textAlign: 'center',
+    // justifyContent: 'center'
+  },
+
+  modalInputPlace: {
+    width: width / 1.8,
+    borderColor: 'black',
+    padding: 2,
+    margin: 10,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: 1,
+    fontSize: 25,
+    // alignItems: 'center',
     textAlign: 'center',
     // justifyContent: 'center'
   },

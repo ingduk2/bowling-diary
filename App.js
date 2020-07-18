@@ -21,7 +21,7 @@ export default function App() {
   const [isReady, setIsReady] = useState(false);
 
   const cacheResourceAsync = async () => {
-    await new Promise((r) => setTimeout(r, 1500));
+    await new Promise((r) => setTimeout(r, 900));
 
     const images = [
       // eslint-disable-next-line global-require

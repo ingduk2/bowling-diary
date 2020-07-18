@@ -21,9 +21,21 @@ import { numberAppendZero } from '../constants/const';
 const { width, height } = Dimensions.get('window');
 
 export default function MemoList(props) {
-  const [modalVisible, setModalVisible] = useState(false);
+  // const [modalVisible, setModalVisible] = useState(false);
 
-  const { id, title, content, createdAt, deleteMemo, updateMemo } = props;
+  const {
+    id,
+    title,
+    content,
+    createdAt,
+    deleteMemo,
+    setTitle,
+    setContent,
+    modalVisible,
+    setModalVisible,
+    setModalState,
+    setId,
+  } = props;
   const [newtitle, setNewTitle] = useState(title);
   const [newcontent, setNewContent] = useState(content);
   let createDate = null;
@@ -55,7 +67,7 @@ export default function MemoList(props) {
   const { theme } = useContext(MemoThemecontext);
   return (
     <View style={[styles.container, theme === 'bright' ? styles.themeBright : styles.themeDark]}>
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent
         visible={modalVisible}
@@ -125,7 +137,7 @@ export default function MemoList(props) {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       <View>
         <View style={styles.column}>
@@ -133,6 +145,10 @@ export default function MemoList(props) {
           <View style={styles.actions}>
             <TouchableOpacity
               onPress={() => {
+                setId(id);
+                setTitle(title);
+                setContent(content);
+                setModalState('update');
                 setModalVisible(!modalVisible);
               }}
             >
@@ -166,8 +182,13 @@ MemoList.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  setContent: PropTypes.func.isRequired,
   deleteMemo: PropTypes.func.isRequired,
-  updateMemo: PropTypes.func.isRequired,
+  modalVisible: PropTypes.bool.isRequired,
+  setModalVisible: PropTypes.func.isRequired,
+  setModalState: PropTypes.func.isRequired,
+  setId: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

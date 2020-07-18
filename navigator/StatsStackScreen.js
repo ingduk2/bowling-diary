@@ -18,21 +18,34 @@ function StatsScreen({ navigation }) {
     setData(loadDatas);
   };
 
-  React.useEffect(
-    () =>
-      // eslint-disable-next-line react/prop-types
-      navigation.addListener('focus', () => {
-        console.log('Screen was ffffffffffffocused');
-        loadScoreDatass();
-      }),
-    [],
-  );
-
-  React.useEffect(
+  React.useEffect(() => {
     // eslint-disable-next-line react/prop-types
-    () => navigation.addListener('blur', () => console.log('Screen was unfocused')),
-    [],
-  );
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Screen was ffffffffffffocused');
+      loadScoreDatass();
+      // The screen is focused
+      // Call any action
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  // React.useEffect(
+  //   () =>
+  //     // eslint-disable-next-line react/prop-types
+  //     navigation.addListener('focus', () => {
+  //       console.log('Screen was ffffffffffffocused');
+  //       loadScoreDatass();
+  //     }),
+  //   [],
+  // );
+
+  // React.useEffect(
+  //   // eslint-disable-next-line react/prop-types
+  //   () => navigation.addListener('blur', () => console.log('Screen was unfocused')),
+  //   [],
+  // );
 
   return (
     <View style={{ flex: 1, padding: 3, backgroundColor: '#fff' }}>

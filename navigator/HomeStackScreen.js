@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable global-require */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Text,
   View,
@@ -13,6 +13,7 @@ import {
   Button,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { FloatingAction } from 'react-native-floating-action';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { v1 as uuidv1 } from 'uuid';
 import ScoreInput from '../components/ScoreInput';
@@ -20,7 +21,8 @@ import WixCalendar from '../components/WixCalendar';
 import { seed } from '../uuid/uuidSeed';
 import ScoreList from '../components/ScoreList';
 import { loadScoreDatas, useScoreData } from './ScoreLoad';
-
+import HomeModal from '../components/modal/HomeModal';
+import HomeThemeContext from '../context/HomeThemeContext';
 const { width, height } = Dimensions.get('window');
 const HomeStack = createStackNavigator();
 
@@ -129,8 +131,10 @@ function HomeScreen() {
   const [_date, setDate] = useState(nowDate);
   console.log('HomeScreen', _date);
   const [_place, setPlace] = useState();
-  // const { locationInputEnable } = useContext(HomeThemeContext);
+  const [_condition, setCondition] = useState(5);
+  const { scorePopupEnable } = useContext(HomeThemeContext);
   const [calandarEnable, setCalandarEnable] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     console.log('ScoreLoads.useEffect');
@@ -152,6 +156,8 @@ function HomeScreen() {
         id: ID,
         score: _score,
         date: _date,
+        place: _place,
+        condition: _condition,
         createdAt: Date.now(),
       },
     };
@@ -168,6 +174,10 @@ function HomeScreen() {
     setPlace(place);
   };
 
+  const saveCondition = (condition) => {
+    setCondition(condition);
+  };
+
   const saveDate = (date) => {
     setDate(date);
     console.log(date);
@@ -175,7 +185,7 @@ function HomeScreen() {
 
   const addScoreData = () => {
     // score
-    console.log('_addScoreData', _score, _date);
+    console.log('_addScoreData', _score, _date, _place, _condition);
     if (_score == null || _score === '' || _date == null) {
       Alert.alert('점수나 날짜를 확인해주세요');
       return;
@@ -203,13 +213,15 @@ function HomeScreen() {
     setData(newDatas);
   };
 
-  const updateScoreData = (id, score) => {
+  const updateScoreData = (id, score, place, condition) => {
     const newDatas = {
       ...datas,
 
       [id]: {
         ...datas[id],
         score,
+        place,
+        condition,
       },
     };
     saveScoreData(newDatas);
@@ -228,13 +240,21 @@ function HomeScreen() {
         backgroundColor: '#fff',
       }}
     >
+      <HomeModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        setScore={setScore}
+        setPlace={setPlace}
+        setCondition={setCondition}
+        addScoreData={addScoreData}
+      />
       <View style={{ backgroundColor: 'white' }}>
         {calandarEnable === true && (
           <ScrollView>
             <WixCalendar style={{ height }} saveDate={saveDate} datas={datas} nowDate={_date} />
           </ScrollView>
         )}
-        {calandarEnable === true && (
+        {/* {calandarEnable === true && (
           <View style={{ alignItems: 'flex-start' }}>
             <AntDesign
               style={{ backgroundColor: 'yellow' }}
@@ -260,8 +280,14 @@ function HomeScreen() {
               }}
             />
           </View>
-        )}
-        <ScoreInput saveScore={saveScore} addScoreData={addScoreData} savePlace={savePlace} />
+        )} */}
+        <ScoreInput
+          saveScore={saveScore}
+          addScoreData={addScoreData}
+          savePlace={savePlace}
+          saveCondition={saveCondition}
+          calandarEnable={calandarEnable}
+        />
       </View>
       <Text
         style={{
@@ -303,6 +329,25 @@ function HomeScreen() {
             })}
         </ScrollView>
       </View>
+      <FloatingAction
+        // ref={(ref) => { this.floatingAction = ref; }}
+        // actions={actions}
+        showBackground={false}
+        // overrideWithAction={false}
+        animated={false}
+        onPressMain={() => {
+          console.log('onPress');
+          if (!scorePopupEnable) {
+            setCalandarEnable(!calandarEnable);
+          } else {
+            setModalVisible(!modalVisible);
+          }
+        }}
+        onPressItem={(name) => {
+          console.log(`selected button: ${name}`);
+          // setModalVisible(!modalVisible);
+        }}
+      />
       {/* <View>
                 <Stats datas={datas}/>
             </View> */}
