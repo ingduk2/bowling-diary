@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
 import StatsThemeContext from './StatsThemeContext';
+import { array } from 'prop-types';
 
 export async function loadStatsThemeDatas() {
   let statsThemeDatas = {};
@@ -28,121 +29,66 @@ export async function loadStatsThemeDatas() {
 }
 
 const StatsThemeProvider = ({ children }) => {
-  // const datas = loadStatsThemeDatas();
-  // const parsedToDos = JSON.parse(datas);
-
-  const toggleEntireTable = () => {
+  const toggleStats = (id) => {
     // eslint-disable-next-line no-use-before-define
     setStatsTheme((prevState) => {
+      // console.log(JSON.stringify(prevState));
+
+      const prevArr = prevState.array;
+      const current = prevArr[id].enable;
+      prevArr[id].enable = !current;
+      // console.log(prevArr);
+
       const newState = {
         ...prevState,
-        entireTableEnable: !prevState.entireTableEnable,
+        aray: prevArr,
       };
-      console.log(newState);
       AsyncStorage.setItem('StatsThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        entireTableEnable: !prevState.entireTableEnable,
-      };
+      return newState;
     });
-  };
-
-  const toggleRecentTable = () => {
-    // eslint-disable-next-line no-use-before-define
-    setStatsTheme((prevState) => {
-      const newState = {
-        ...prevState,
-        recentTableEnable: !prevState.recentTableEnable,
-      };
-      console.log(newState);
-      AsyncStorage.setItem('StatsThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        recentTableEnable: !prevState.recentTableEnable,
-      };
-    });
-  };
-
-  const toggleYearChart = () => {
-    // eslint-disable-next-line no-use-before-define
-    setStatsTheme((prevState) => {
-      const newState = {
-        ...prevState,
-        yearChartEnable: !prevState.yearChartEnable,
-      };
-      console.log(newState);
-      AsyncStorage.setItem('StatsThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        yearChartEnable: !prevState.yearChartEnable,
-      };
-    });
-  };
-
-  const toggleMonthChart = () => {
-    // eslint-disable-next-line no-use-before-define
-    setStatsTheme((prevState) => {
-      const newState = {
-        ...prevState,
-        monthChartEnable: !prevState.monthChartEnable,
-      };
-      console.log(newState);
-      AsyncStorage.setItem('StatsThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        monthChartEnable: !prevState.monthChartEnable,
-      };
-    });
-  };
-
-  const toggleDayChart = () => {
-    // eslint-disable-next-line no-use-before-define
-    setStatsTheme((prevState) => {
-      const newState = {
-        ...prevState,
-        dayChartEnable: !prevState.dayChartEnable,
-      };
-      console.log(newState);
-      AsyncStorage.setItem('StatsThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        dayChartEnable: !prevState.dayChartEnable,
-      };
-    });
-  };
-
-  const initialState = {
-    entireTableEnable: true,
-    recentTableEnable: true,
-    yearChartEnable: true,
-    monthChartEnable: true,
-    dayChartEnable: true,
-    toggleEntireTable,
-    toggleRecentTable,
-    toggleYearChart,
-    toggleMonthChart,
-    toggleDayChart,
   };
 
   const [statsTheme, setStatsTheme] = useState({});
+
+  const initialState = {
+    array: [
+      {
+        id: 0,
+        enable: true,
+        name: '전체 통계 On Off',
+      },
+      {
+        id: 1,
+        enable: true,
+        name: '최근 통계 On Off',
+      },
+      {
+        id: 2,
+        enable: true,
+        name: '년 차트 On Off',
+      },
+      {
+        id: 3,
+        enable: true,
+        name: '달 차트 On Off',
+      },
+      {
+        id: 4,
+        enable: true,
+        name: '일 차트 On Off',
+      },
+    ],
+  };
 
   useEffect(() => {
     console.log('StatsThemeProvider.useEffect');
     const fetchData = async () => {
       const loadDatas = await loadStatsThemeDatas();
-      // console.log(articleData);
+      // console.log('loadDatas', loadDatas);
       const loadState = {
         ...initialState,
-        entireTableEnable: loadDatas.entireTableEnable,
-        recentTableEnable: loadDatas.recentTableEnable,
-        yearChartEnable: loadDatas.yearChartEnable,
-        monthChartEnable: loadDatas.monthChartEnable,
-        dayChartEnable: loadDatas.dayChartEnable,
-        toggleEntireTable,
-        toggleRecentTable,
-        toggleYearChart,
-        toggleMonthChart,
-        toggleDayChart,
+        array: loadDatas.array,
+        toggleStats,
       };
       setStatsTheme(loadState);
     };

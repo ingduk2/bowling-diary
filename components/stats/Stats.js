@@ -10,24 +10,18 @@ import ChartMonth from './chartMonth';
 import StatsThemeContext from '../../context/StatsThemeContext';
 
 export default function Stats(props) {
-  const {
-    entireTableEnable,
-    recentTableEnable,
-    yearChartEnable,
-    monthChartEnable,
-    dayChartEnable,
-  } = useContext(StatsThemeContext);
+  const { array } = useContext(StatsThemeContext);
 
   console.log('render1');
   const { datas } = props;
 
   return (
     <View>
-      {entireTableEnable === true && <EntireTable datas={datas} />}
-      {recentTableEnable === true && <RecentTable datas={datas} />}
-      {yearChartEnable === true && <Chart datas={datas} />}
-      {monthChartEnable === true && <ChartMonth datas={datas} />}
-      {dayChartEnable === true && <ChartDay datas={datas} />}
+      {array[0].enable === true && <EntireTable datas={datas} />}
+      {array[1].enable === true && <RecentTable datas={datas} />}
+      {array[2].enable === true && <Chart datas={datas} />}
+      {array[3].enable === true && <ChartMonth datas={datas} />}
+      {array[4].enable === true && <ChartDay datas={datas} />}
     </View>
   );
 }

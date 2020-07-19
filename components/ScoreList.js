@@ -126,12 +126,17 @@ export default function ScoreList(props) {
           {/* <Text style={styles.text}>
             [{place}] {score} 점 ({condition})
           </Text> */}
-          <MaterialIcons name="place" size={30} color="black" />
+          <MaterialIcons
+            name="place"
+            size={30}
+            // color="yellow"
+            style={{ color: '#c3ebff' }}
+          />
           <Text style={styles.text}>{place}</Text>
-          <FontAwesome5 name="bowling-ball" size={24} />
+          <FontAwesome5 name="bowling-ball" size={24} color="#c3ebff" />
           <Text style={styles.text}>{score}점</Text>
 
-          <FontAwesome name="heartbeat" size={24} color="black" />
+          <FontAwesome name="heartbeat" size={24} color="#c3ebff" />
           <Text style={styles.text}>{condition}</Text>
         </View>
 

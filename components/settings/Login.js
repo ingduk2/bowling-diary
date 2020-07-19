@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Alert, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // const { width, height } = Dimensions.get('window');
 
@@ -40,9 +41,12 @@ export default function Login() {
           justifyContent: 'center',
         }}
       >
-        <TouchableOpacity onPress={() => logIn()}>
+        {/* <TouchableOpacity onPress={() => logIn()}>
           <Text style={styles.mainText}>FaceBook Login</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <Icon.Button name="facebook" backgroundColor="#3b5998" onPress={logIn}>
+          Login with Facebook
+        </Icon.Button>
       </View>
     </View>
   );
