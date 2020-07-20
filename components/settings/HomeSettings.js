@@ -7,19 +7,30 @@ import styles from './style';
 // const { width, height } = Dimensions.get('window');
 
 export default function HomeSettings() {
-  const {
-    scoreInputEnable,
-    locationInputEnable,
-    conditionInputEnable,
-    scorePopupEnable,
-    toggleScoreInput,
-    toggleLocationInput,
-    toggleConditionInput,
-    toggleScorePopupEnable,
-  } = useContext(HomeThemeContext);
+  const { homeThemes, toggleHome } = useContext(HomeThemeContext);
+  console.log(homeThemes.scoreInput.enable);
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
-      <View style={styles.row}>
+      {Object.entries(homeThemes)
+        .sort((a, b) => a[1].index - b[1].index)
+        .map(([key, value]) => {
+          // console.log(key, value);
+          return (
+            <View style={styles.row}>
+              <Text style={styles.textStyle}>{value.name}</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: 'green' }}
+                thumbColor={value.enable ? '#f4f3f4' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => {
+                  toggleHome(key);
+                }}
+                value={value.enable}
+              />
+            </View>
+          );
+        })}
+      {/* <View style={styles.row}>
         <Text style={styles.textStyle}>점수 입력 고정 사용</Text>
         <Switch
           trackColor={{ false: '#767577', true: 'green' }}
@@ -57,8 +68,8 @@ export default function HomeSettings() {
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleScorePopupEnable}
           value={scorePopupEnable}
-        />
-      </View>
+        /> */}
+      {/* </View> */}
     </View>
   );
 }

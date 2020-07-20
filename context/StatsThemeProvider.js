@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
 import StatsThemeContext from './StatsThemeContext';
-import { array } from 'prop-types';
 
 export async function loadStatsThemeDatas() {
   let statsThemeDatas = {};

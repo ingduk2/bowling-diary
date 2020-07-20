@@ -28,71 +28,48 @@ export async function loadHomeThemeDatas() {
 }
 
 const HomeThemeProvider = ({ children }) => {
-  const toggleLocationInput = () => {
+  const toggleHome = (key) => {
+    // console.log(key);
+    // console.log(homeTheme.homeThemes[key]);
     setHomeTheme((prevState) => {
+      console.log(prevState);
+      const prevEnable = prevState.homeThemes[key].enable;
       const newState = {
         ...prevState,
-        locationInputEnable: !prevState.locationInputEnable,
+        homeThemes: {
+          ...prevState.homeThemes,
+          [key]: { ...prevState.homeThemes[key], enable: !prevEnable },
+        },
       };
       AsyncStorage.setItem('HomeThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        locationInputEnable: !prevState.locationInputEnable,
-      };
-    });
-  };
-
-  const toggleScoreInput = () => {
-    setHomeTheme((prevState) => {
-      const newState = {
-        ...prevState,
-        scoreInputEnable: !prevState.scoreInputEnable,
-      };
-      AsyncStorage.setItem('HomeThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        scoreInputEnable: !prevState.scoreInputEnable,
-      };
-    });
-  };
-
-  const toggleConditionInput = () => {
-    setHomeTheme((prevState) => {
-      const newState = {
-        ...prevState,
-        conditionInputEnable: !prevState.conditionInputEnable,
-      };
-      AsyncStorage.setItem('HomeThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        conditionInputEnable: !prevState.conditionInputEnable,
-      };
-    });
-  };
-
-  const toggleScorePopupEnable = () => {
-    setHomeTheme((prevState) => {
-      const newState = {
-        ...prevState,
-        scorePopupEnable: !prevState.scorePopupEnable,
-      };
-      AsyncStorage.setItem('HomeThemeDatas', JSON.stringify(newState));
-      return {
-        ...prevState,
-        scorePopupEnable: !prevState.scorePopupEnable,
-      };
+      return newState;
     });
   };
 
   const initialState = {
-    scoreInputEnable: true,
-    locationInputEnable: true,
-    conditionInputEnable: true,
-    scorePopupEnable: true,
-    toggleScoreInput,
-    toggleLocationInput,
-    toggleConditionInput,
-    toggleScorePopupEnable,
+    homeThemes: {
+      scoreInput: {
+        index: 0,
+        enable: false,
+        name: '점수 입력 고정 사용',
+      },
+      placeInput: {
+        index: 1,
+        enable: false,
+        name: '장소 입력 고정 사용',
+      },
+      conditionInput: {
+        index: 2,
+        enable: false,
+        name: '컨디션 입력 고정 사용',
+      },
+      popupInput: {
+        index: 3,
+        enable: false,
+        name: '팝업 점수입력 사용',
+      },
+    },
+    toggleHome,
   };
 
   const [homeTheme, setHomeTheme] = useState({});
@@ -104,10 +81,7 @@ const HomeThemeProvider = ({ children }) => {
       // console.log(articleData);
       const loadState = {
         ...initialState,
-        scoreInputEnable: loadDatas.scoreInputEnable,
-        locationInputEnable: loadDatas.locationInputEnable,
-        conditionInputEnable: loadDatas.conditionInputEnable,
-        scorePopupEnable: loadDatas.scorePopupEnable,
+        homeThemes: loadDatas.homeThemes,
       };
       setHomeTheme(loadState);
     };

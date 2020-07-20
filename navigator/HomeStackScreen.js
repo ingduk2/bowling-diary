@@ -140,7 +140,7 @@ function HomeScreen() {
     console.log('ScoreLoads.useEffect');
     const fetchData = async () => {
       const loadDatas = await loadScoreDatas();
-      // console.log(articleData);
+      console.log(loadDatas);
       setData(loadDatas);
     };
     fetchData();

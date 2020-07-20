@@ -1,14 +1,8 @@
 import { createContext } from 'react';
 
 const HomeThemeContext = createContext({
-  scoreInputEnable: true,
-  locationInputEnable: true,
-  conditionInputEnable: true,
-  scorePopupEnable: true,
-  toggleScoreInput: () => {},
-  toggleLocationInput: () => {},
-  toggleConditionInput: () => {},
-  toggleScorePopupEnable: () => {},
+  homeThemes: {},
+  toggleHome: () => {},
 });
 
 export default HomeThemeContext;
