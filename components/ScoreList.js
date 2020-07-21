@@ -1,18 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  TouchableHighlight,
-} from 'react-native';
-import { Rating, AirbnbRating } from 'react-native-elements';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Entypo, Feather, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
@@ -20,106 +9,24 @@ const { width } = Dimensions.get('window');
 
 export default function ScoreList(props) {
   // console.log(ScoreList, props);
-  const [isEditing, setIsEditing] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const { deleteScoreData, updateScoreData, id, date, score, place, condition } = props;
-  const [newScore, setNewScore] = useState(score);
-  const [newPlace, setNewPlace] = useState(place);
-  const [newCondition, setNewCondition] = useState(condition);
-  const startEditing = () => {
-    // setIsEditing(true);
-    setModalVisible(true);
-    // createTwoButtonAlert();
-  };
+  const {
+    deleteScoreData,
+    id,
+    date,
+    score,
+    place,
+    condition,
+    setId,
+    setScore,
+    setPlace,
+    setCondition,
+    modalVisible,
+    setModalVisible,
+    setModalState,
+  } = props;
 
-  const finishEditing = () => {
-    setIsEditing(false);
-  };
-
-  // const time = new Date(ms).toLocaleString();
   return (
     <View style={styles.container}>
-      {/* <View style={styles.centeredView}> */}
-      <Modal
-        animationType="slide"
-        transparent
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>수정</Text>
-            <TextInput
-              style={styles.modalInputScore}
-              placeholder="Score"
-              value={newScore}
-              editable
-              underlineColorAndroid="transparent"
-              keyboardType="numeric"
-              maxLength={3}
-              returnKeyType="done"
-              onChangeText={(textScore) => {
-                console.log(textScore);
-                let returnScore = textScore;
-                if (Number(returnScore) > 300) {
-                  console.log('300!!!!');
-                  returnScore = '300';
-                }
-                setNewScore(returnScore);
-              }}
-            />
-            <TextInput
-              value={newPlace}
-              style={styles.modalInputPlace}
-              placeholder="Place"
-              multiline
-              blurOnSubmit
-              returnKeyType="done"
-              maxLength={10}
-              underlineColorAndroid="transparent"
-              onChangeText={(text) => {
-                setNewPlace(text);
-              }}
-            />
-            <Rating
-              type="heart"
-              ratingCount={5}
-              imageSize={40}
-              startingValue={newCondition}
-              // showRating
-              onFinishRating={(rating) => setNewCondition(rating)}
-            />
-            <View style={styles.actions}>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <Text style={styles.textStyle}>cancle</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{
-                  ...styles.openButton,
-                  backgroundColor: '#219FFF',
-                  marginLeft: 20,
-                  width: 60,
-                }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  // update Score...
-                  updateScoreData(id, newScore, newPlace, newCondition);
-                }}
-              >
-                <Text style={styles.textStyle}>ok</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
       <View style={styles.column}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Entypo style={styles.dot} name="dot-single" size={24} color="black" />
@@ -140,48 +47,54 @@ export default function ScoreList(props) {
           <Text style={styles.text}>{condition}</Text>
         </View>
 
-        {isEditing ? (
-          <View style={styles.actions}>
-            <TouchableOpacity onPressOut={finishEditing}>
-              <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>✅</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.actions}>
-            <TouchableOpacity onPressOut={startEditing}>
-              <View style={styles.actionContainer}>
-                {/* <Text style={styles.actionText}>✏️</Text> */}
-                <Entypo name="pencil" size={24} color="black" />
-              </View>
-            </TouchableOpacity>
+        <View style={styles.actions}>
+          <TouchableOpacity
+            onPressOut={() => {
+              setModalState('update');
+              setId(id);
+              setScore(score);
+              setPlace(place);
+              setCondition(condition);
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.actionContainer}>
+              {/* <Text style={styles.actionText}>✏️</Text> */}
+              <Entypo name="pencil" size={24} color="black" />
+            </View>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              onPressOut={() => {
-                deleteScoreData(id);
-              }}
-            >
-              <View style={styles.actionContainer}>
-                {/* <Text style={styles.actionText}>❌</Text> */}
-                <Feather name="trash-2" size={24} color="black" />
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
+          <TouchableOpacity
+            onPressOut={() => {
+              deleteScoreData(id);
+            }}
+          >
+            <View style={styles.actionContainer}>
+              {/* <Text style={styles.actionText}>❌</Text> */}
+              <Feather name="trash-2" size={24} color="black" />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 }
 
 ScoreList.propTypes = {
+  setId: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   deleteScoreData: PropTypes.func.isRequired,
-  updateScoreData: PropTypes.func.isRequired,
+  // updateScoreData: PropTypes.func.isRequired,
   score: PropTypes.string.isRequired,
   place: PropTypes.string.isRequired,
   condition: PropTypes.number.isRequired,
+  setScore: PropTypes.func.isRequired,
+  setPlace: PropTypes.func.isRequired,
+  setCondition: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
+  modalVisible: PropTypes.bool.isRequired,
+  setModalVisible: PropTypes.func.isRequired,
+  setModalState: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

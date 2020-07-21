@@ -16,23 +16,36 @@ import PropTypes from 'prop-types';
 
 const { width, height } = Dimensions.get('window');
 
-export default function HomeModal(props) {
-  const { modalVisible, setModalVisible, setScore, setPlace, setCondition, addScoreData } = props;
-  const [modalScore, setModalScore] = useState('');
-  const [modalPlace, setModalPlace] = useState('');
-  const [modalCondition, setModalCondition] = useState(5);
-  //   useEffect(() => {
-  //     console.log('title');
-  //     setNewTitle(props.title);
-  //   }, [props]);
+export default function ScoreModal(props) {
+  const {
+    id,
+    score,
+    place,
+    condition,
+    modalVisible,
+    setModalVisible,
+    setScore,
+    setPlace,
+    setCondition,
+    addScoreData,
+    updateScoreData,
+    modalState,
+  } = props;
+  const [modalScore, setModalScore] = useState(score);
+  const [modalPlace, setModalPlace] = useState(place);
+  const [modalCondition, setModalCondition] = useState(condition);
+  useEffect(() => {
+    setModalScore(props.score);
+  }, [props]);
 
-  //   useEffect(() => {
-  //     console.log('content');
-  //     setNewContent(props.content);
-  //   }, [props]);
+  useEffect(() => {
+    setModalPlace(props.place);
+  }, [props]);
 
-  //   const [title, setTitle] = useState(title);
-  //   const [content, setContent] = useState(title);
+  useEffect(() => {
+    setModalCondition(props.condition);
+  }, [props]);
+
   return (
     <View>
       <Modal
@@ -45,7 +58,7 @@ export default function HomeModal(props) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>점수 입력</Text>
+            <Text style={styles.modalText}>{modalState === 'add' ? '점수 입력' : '점수 수정'}</Text>
             <View style={styles.container}>
               <View style={{ flexDirection: 'row' }}>
                 <FontAwesome5 name="bowling-ball" size={35} />
@@ -75,7 +88,7 @@ export default function HomeModal(props) {
                 {/* <MaterialIcons name="place" size={35} color="black" onPress={() => {}} /> */}
                 {/* <Entypo name="plus" size={35} color="black" /> */}
               </View>
-              <View style={{ flexDirection: 'row', paddingRight: 35 }}>
+              <View style={{ flexDirection: 'row' }}>
                 <MaterialIcons name="place" size={35} color="black" />
                 <TextInput
                   value={modalPlace}
@@ -92,7 +105,7 @@ export default function HomeModal(props) {
                   }}
                 />
               </View>
-              <View style={{ flexDirection: 'row', paddingRight: 35, alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <FontAwesome name="heartbeat" size={35} color="black" />
                 <Rating
                   type="heart"
@@ -128,13 +141,12 @@ export default function HomeModal(props) {
                   width: 60,
                 }}
                 onPress={() => {
-                  console.log(modalScore, modalPlace, modalCondition);
-                  //   setScore(modalScore);
-                  //   setPlace(modalPlace);
-                  //   setCondition(modalCondition);
-                  setModalScore('');
-                  addScoreData();
-                  //   setModalVisible(!modalVisible);
+                  if (modalState === 'add') {
+                    addScoreData();
+                  } else if (modalState === 'update') {
+                    updateScoreData(id, modalScore, modalPlace, modalCondition);
+                    setModalVisible(!modalVisible);
+                  }
                 }}
               >
                 <Text style={styles.textStyle}>ok</Text>
@@ -147,13 +159,19 @@ export default function HomeModal(props) {
   );
 }
 
-HomeModal.propTypes = {
+ScoreModal.propTypes = {
+  id: PropTypes.string.isRequired,
+  score: PropTypes.string.isRequired,
+  place: PropTypes.string.isRequired,
+  condition: PropTypes.number.isRequired,
   modalVisible: PropTypes.bool.isRequired,
   addScoreData: PropTypes.func.isRequired,
+  updateScoreData: PropTypes.func.isRequired,
   setModalVisible: PropTypes.func.isRequired,
   setScore: PropTypes.func.isRequired,
   setPlace: PropTypes.func.isRequired,
   setCondition: PropTypes.func.isRequired,
+  modalState: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({

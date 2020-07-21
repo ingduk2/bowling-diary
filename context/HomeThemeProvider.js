@@ -8,16 +8,11 @@ export async function loadHomeThemeDatas() {
   let homeThemeDatas = {};
   try {
     const datas = await AsyncStorage.getItem('HomeThemeDatas');
-    console.log('datas', datas);
+    // console.log('datas', datas);
     const parsedToDos = JSON.parse(datas);
-    console.log('parsedToDos', parsedToDos);
-    if (parsedToDos == null) {
-      homeThemeDatas = {
-        scoreInputEnable: true,
-        locationInputEnable: true,
-        conditionInputEnable: true,
-        scorePopupEnable: true,
-      };
+    // console.log('parsedToDos', parsedToDos);
+    if (parsedToDos === null) {
+      homeThemeDatas = {};
     } else {
       homeThemeDatas = parsedToDos;
     }
@@ -28,9 +23,8 @@ export async function loadHomeThemeDatas() {
 }
 
 const HomeThemeProvider = ({ children }) => {
-  const toggleHome = (key) => {
-    // console.log(key);
-    // console.log(homeTheme.homeThemes[key]);
+  const toggleFunc = (key) => {
+    console.log(key);
     setHomeTheme((prevState) => {
       console.log(prevState);
       const prevEnable = prevState.homeThemes[key].enable;
@@ -49,27 +43,27 @@ const HomeThemeProvider = ({ children }) => {
   const initialState = {
     homeThemes: {
       scoreInput: {
-        index: 0,
+        id: 0,
         enable: false,
         name: '점수 입력 고정 사용',
       },
       placeInput: {
-        index: 1,
+        id: 1,
         enable: false,
         name: '장소 입력 고정 사용',
       },
       conditionInput: {
-        index: 2,
+        id: 2,
         enable: false,
         name: '컨디션 입력 고정 사용',
       },
       popupInput: {
-        index: 3,
+        id: 3,
         enable: false,
         name: '팝업 점수입력 사용',
       },
     },
-    toggleHome,
+    toggleFunc,
   };
 
   const [homeTheme, setHomeTheme] = useState({});

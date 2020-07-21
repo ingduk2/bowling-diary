@@ -7,17 +7,11 @@ export async function loadStatsThemeDatas() {
   let statsThemeDatas = {};
   try {
     const datas = await AsyncStorage.getItem('StatsThemeDatas');
-    console.log('datas', datas);
+    // console.log('datas', datas);
     const parsedToDos = JSON.parse(datas);
-    console.log('parsedToDos', parsedToDos);
+    // console.log('parsedToDos', parsedToDos);
     if (parsedToDos == null) {
-      statsThemeDatas = {
-        entireTableEnable: true,
-        recentTableEnable: true,
-        yearChartEnable: true,
-        monthChartEnable: true,
-        dayChartEnable: true,
-      };
+      statsThemeDatas = {};
     } else {
       statsThemeDatas = parsedToDos;
     }
@@ -28,7 +22,7 @@ export async function loadStatsThemeDatas() {
 }
 
 const StatsThemeProvider = ({ children }) => {
-  const toggleStats = (id) => {
+  const toggleFunc = (id) => {
     // eslint-disable-next-line no-use-before-define
     setStatsTheme((prevState) => {
       // console.log(JSON.stringify(prevState));
@@ -87,7 +81,7 @@ const StatsThemeProvider = ({ children }) => {
       const loadState = {
         ...initialState,
         array: loadDatas.array,
-        toggleStats,
+        toggleFunc,
       };
       setStatsTheme(loadState);
     };

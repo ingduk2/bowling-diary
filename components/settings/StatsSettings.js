@@ -6,13 +6,21 @@ import StatsThemeContext from '../../context/StatsThemeContext';
 import styles from './style';
 
 export default function StatsSettings() {
-  const { array, toggleStats } = useContext(StatsThemeContext);
+  const { array, toggleFunc } = useContext(StatsThemeContext);
 
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
       {array.map((data) => {
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        return <SettingSwitch key={data.id} toggleStats={toggleStats} {...data} />;
+        return (
+          <SettingSwitch
+            key={data.id}
+            toggleFunc={toggleFunc}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...data}
+            kind="Stats"
+            keyString="keyString"
+          />
+        );
       })}
     </View>
   );

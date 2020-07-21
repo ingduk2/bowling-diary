@@ -1,10 +1,12 @@
 /* eslint-disable no-use-before-define */
-import React, { useState, useContext } from 'react';
-import { StyleSheet, View, TextInput, Dimensions, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, View, TextInput, Dimensions, Alert, Button } from 'react-native';
 import { FontAwesome5, AntDesign, MaterialIcons, Entypo, FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-import { Rating, AirbnbRating } from 'react-native-elements';
+import { Rating, AirbnbRating, SearchBar } from 'react-native-elements';
+import * as Location from 'expo-location';
 import HomeThemeContext from '../context/HomeThemeContext';
+import MapSearch from './map/MapSearch';
 
 const { width } = Dimensions.get('window');
 
@@ -13,18 +15,30 @@ export default function ScoreInput(props) {
   const [score, setScore] = useState('');
   const [place, setPlace] = useState('');
   const [condition, setCondition] = useState(5);
-  const { scoreInputEnable, locationInputEnable, conditionInputEnable } = useContext(
-    HomeThemeContext,
-  );
+  const { homeThemes } = useContext(HomeThemeContext);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const ratingCompleted = (rating) => {
     console.log(rating);
     setCondition(rating);
     saveCondition(rating);
   };
-  return (
+
+  const savePlaceInfo = (info) => {
+    console.log('scoreInput', info);
+    setPlace(info.name);
+  };
+  // if (homeThemes == null) homeThemes = null;
+  console.log('ScoreInput', homeThemes);
+  return homeThemes ? (
     <View style={styles.container}>
-      {(!calandarEnable || scoreInputEnable === true) && (
+      <MapSearch
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        savePlaceInfo={savePlaceInfo}
+      />
+      {(!calandarEnable || homeThemes.scoreInput.enable === true) && (
         <View style={{ flexDirection: 'row' }}>
           <FontAwesome5 name="bowling-ball" size={35} />
           {/* <MyCalendar/> */}
@@ -64,7 +78,7 @@ export default function ScoreInput(props) {
           {/* <Entypo name="plus" size={35} color="black" /> */}
         </View>
       )}
-      {(!calandarEnable || locationInputEnable === true) === true && (
+      {(!calandarEnable || homeThemes.placeInput.enable === true) === true && (
         <View style={{ flexDirection: 'row', paddingRight: 35 }}>
           <MaterialIcons name="place" size={35} color="black" />
           <TextInput
@@ -81,9 +95,16 @@ export default function ScoreInput(props) {
               setPlace(text);
             }}
           />
+          <Button
+            title="search"
+            onPress={() => {
+              setPlace('');
+              setModalVisible(!modalVisible);
+            }}
+          />
         </View>
       )}
-      {(!calandarEnable || conditionInputEnable === true) === true && (
+      {(!calandarEnable || homeThemes.conditionInput.enable === true) === true && (
         <View style={{ flexDirection: 'row', paddingRight: 35, alignItems: 'center' }}>
           <FontAwesome name="heartbeat" size={35} color="black" />
           <Rating
@@ -100,7 +121,7 @@ export default function ScoreInput(props) {
         </View>
       )}
     </View>
-  );
+  ) : null;
 }
 
 ScoreInput.propTypes = {

@@ -12,7 +12,7 @@ import StatsThemeContext from '../../context/StatsThemeContext';
 export default function Stats(props) {
   const { array } = useContext(StatsThemeContext);
 
-  console.log('render1');
+  console.log('Stats', array);
   const { datas } = props;
 
   return (

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './style';
 
 export default function SettingSwitch(props) {
-  const { id, name, enable, toggleStats } = props;
+  const { keyString, id, name, enable, toggleFunc, kind } = props;
   console.log(props);
   return (
     <View style={styles.row}>
@@ -15,7 +15,12 @@ export default function SettingSwitch(props) {
         thumbColor={enable ? '#f4f3f4' : '#f4f3f4'}
         ios_backgroundColor="#3e3e3e"
         onValueChange={() => {
-          toggleStats(id);
+          if (kind === 'Home') {
+            toggleFunc(keyString);
+          } else if (kind === 'Stats') {
+            toggleFunc(id);
+          }
+
           // toggleDayChart();
         }}
         value={enable}
@@ -25,8 +30,10 @@ export default function SettingSwitch(props) {
 }
 
 SettingSwitch.propTypes = {
+  keyString: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   enable: PropTypes.bool.isRequired,
-  toggleStats: PropTypes.func.isRequired,
+  toggleFunc: PropTypes.func.isRequired,
+  kind: PropTypes.string.isRequired,
 };

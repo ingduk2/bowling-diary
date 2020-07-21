@@ -36,8 +36,7 @@ export default function MemoList(props) {
     setModalState,
     setId,
   } = props;
-  const [newtitle, setNewTitle] = useState(title);
-  const [newcontent, setNewContent] = useState(content);
+
   let createDate = null;
   if (Platform.OS === 'ios') {
     createDate = new Date(createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
@@ -67,78 +66,6 @@ export default function MemoList(props) {
   const { theme } = useContext(MemoThemecontext);
   return (
     <View style={[styles.container, theme === 'bright' ? styles.themeBright : styles.themeDark]}>
-      {/* <Modal
-        animationType="slide"
-        transparent
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>메모 입력</Text>
-            <TextInput
-              style={styles.modalTitle}
-              placeholder="제목"
-              value={newtitle}
-              editable
-              underlineColorAndroid="transparent"
-              // keyboardType='numeric'
-              maxLength={11}
-              returnKeyType="done"
-              multiline
-              autoCorrect={false}
-              onChangeText={setNewTitle}
-            />
-            <TextInput
-              style={styles.modalContent}
-              value={newcontent}
-              placeholder="내용"
-              editable
-              underlineColorAndroid="transparent"
-              // keyboardType='numeric'
-              // maxLength={3}
-              // returnKeyType={"done"}
-              multiline
-              autoCorrect={false}
-              onChangeText={setNewContent}
-            />
-            <View style={styles.actions}>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <Text style={styles.textStyle}>cancle</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{
-                  ...styles.openButton,
-                  backgroundColor: '#219FFF',
-                  marginLeft: 20,
-                  width: 60,
-                }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  // update Score...
-                  const newMemo = {
-                    id,
-                    newtitle,
-                    newcontent,
-                  };
-                  console.log('==============', newMemo);
-                  updateMemo(newMemo);
-                }}
-              >
-                <Text style={styles.textStyle}>ok</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </View>
-      </Modal> */}
-
       <View>
         <View style={styles.column}>
           <Text style={styles.title}>{title}</Text>
