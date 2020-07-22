@@ -63,6 +63,16 @@ const sections = [
         func: settingNavigate,
         screenName: 'AppInfo',
       },
+      {
+        title: '데이터 관리',
+        // backgroundColor: BLUE,
+        iconType: 'AntDesign',
+        icon: 'info',
+        // rightTitle: 'Off',
+        // eslint-disable-next-line no-use-before-define
+        func: settingNavigate,
+        screenName: 'DataManagement',
+      },
     ],
   },
 ];

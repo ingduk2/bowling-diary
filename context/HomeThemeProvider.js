@@ -5,14 +5,14 @@ import { AsyncStorage } from 'react-native';
 import HomeThemeContext from './HomeThemeContext';
 
 export async function loadHomeThemeDatas() {
-  let homeThemeDatas = {};
+  let homeThemeDatas = null;
   try {
     const datas = await AsyncStorage.getItem('HomeThemeDatas');
     // console.log('datas', datas);
     const parsedToDos = JSON.parse(datas);
     // console.log('parsedToDos', parsedToDos);
     if (parsedToDos === null) {
-      homeThemeDatas = {};
+      // homeThemeDatas = {};
     } else {
       homeThemeDatas = parsedToDos;
     }
@@ -63,7 +63,6 @@ const HomeThemeProvider = ({ children }) => {
         name: '팝업 점수입력 사용',
       },
     },
-    toggleFunc,
   };
 
   const [homeTheme, setHomeTheme] = useState({});
@@ -72,10 +71,11 @@ const HomeThemeProvider = ({ children }) => {
     console.log('HomeThemeProvider.useEffect');
     const fetchData = async () => {
       const loadDatas = await loadHomeThemeDatas();
-      // console.log(articleData);
+      console.log(loadDatas);
       const loadState = {
         ...initialState,
-        homeThemes: loadDatas.homeThemes,
+        homeThemes: loadDatas ? loadDatas.homeThemes : initialState.homeThemes,
+        toggleFunc,
       };
       setHomeTheme(loadState);
     };

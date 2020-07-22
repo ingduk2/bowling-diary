@@ -14,6 +14,7 @@ import SettingsStackScreen from './navigator/SettingsStackScreen';
 import HomeThemeProvider from './context/HomeThemeProvider';
 import MemoThemeProvider from './context/MemoThemeProvider';
 import StatsThemeProvider from './context/StatsThemeProvider';
+// import Firebase from './constants/Firebase';
 
 const Tab = createBottomTabNavigator();
 

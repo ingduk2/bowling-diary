@@ -4,14 +4,14 @@ import { AsyncStorage } from 'react-native';
 import StatsThemeContext from './StatsThemeContext';
 
 export async function loadStatsThemeDatas() {
-  let statsThemeDatas = {};
+  let statsThemeDatas = null;
   try {
     const datas = await AsyncStorage.getItem('StatsThemeDatas');
     // console.log('datas', datas);
     const parsedToDos = JSON.parse(datas);
     // console.log('parsedToDos', parsedToDos);
     if (parsedToDos == null) {
-      statsThemeDatas = {};
+      // statsThemeDatas = {};
     } else {
       statsThemeDatas = parsedToDos;
     }
@@ -77,10 +77,10 @@ const StatsThemeProvider = ({ children }) => {
     console.log('StatsThemeProvider.useEffect');
     const fetchData = async () => {
       const loadDatas = await loadStatsThemeDatas();
-      // console.log('loadDatas', loadDatas);
+      console.log('loadDatas', loadDatas);
       const loadState = {
         ...initialState,
-        array: loadDatas.array,
+        array: loadDatas ? loadDatas.array : initialState.array,
         toggleFunc,
       };
       setStatsTheme(loadState);

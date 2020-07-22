@@ -1,24 +1,15 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-use-before-define */
 import React, { useState, useEffect } from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  Dimensions,
-  StyleSheet,
-  Alert,
-  Modal,
-  TouchableHighlight,
-} from 'react-native';
+import { Text, View, Dimensions, StyleSheet, Alert, Modal } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { SearchBar } from 'react-native-elements';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import PropTypes from 'prop-types';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-
-const KAKAO_APP_KEY = '7afa794f0fc0e0248862e7a88b91e7e0';
+import { KAKAO_APP_KEY } from '../../key/ApiKey';
+// const KAKAO_APP_KEY = KAKAO_APP_KEY;
 
 const { width, height } = Dimensions.get('window');
 

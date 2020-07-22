@@ -8,7 +8,7 @@ import styles from './style';
 export default function StatsSettings() {
   const { array, toggleFunc } = useContext(StatsThemeContext);
 
-  return (
+  return array ? (
     <View style={{ flex: 1, alignItems: 'center' }}>
       {array.map((data) => {
         return (
@@ -23,5 +23,5 @@ export default function StatsSettings() {
         );
       })}
     </View>
-  );
+  ) : null;
 }

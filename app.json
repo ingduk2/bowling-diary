@@ -1,5 +1,8 @@
 {
   "expo": {
+    "facebookScheme": "fb749205142296622",
+    "facebookAppId": "749205142296622",
+    "facebookDisplayName": "Gorilla-Bowling-Diary",
     "name": "bowling-diary",
     "slug": "bowling-diary",
     "platforms": [
