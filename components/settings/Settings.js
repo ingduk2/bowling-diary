@@ -19,7 +19,7 @@ const sections = [
       {
         title: '로그인',
         // backgroundColor: RED,
-        iconType: 'AntDesign',
+        iconType: 'font-awesome',
         icon: 'user',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,
@@ -28,7 +28,7 @@ const sections = [
       {
         title: '홈 설정',
         // backgroundColor: ORANGE,
-        iconType: 'AntDesign',
+        iconType: 'font-awesome',
         icon: 'home',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,
@@ -37,7 +37,7 @@ const sections = [
       {
         title: '통계 설정',
         // backgroundColor: YELLOW,
-        iconType: 'AntDesign',
+        iconType: 'font-awesome',
         icon: 'bar-chart-o',
         // rightTitle: 'Off',
         // eslint-disable-next-line no-use-before-define
@@ -47,7 +47,7 @@ const sections = [
       {
         title: '메모장 설정',
         // backgroundColor: GREEN,
-        iconType: 'AntDesign',
+        iconType: 'font-awesome',
         icon: 'sticky-note-o',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,
@@ -56,7 +56,7 @@ const sections = [
       {
         title: '앱 정보',
         // backgroundColor: BLUE,
-        iconType: 'AntDesign',
+        iconType: 'font-awesome',
         icon: 'info',
         // rightTitle: 'Off',
         // eslint-disable-next-line no-use-before-define
@@ -66,8 +66,8 @@ const sections = [
       {
         title: '데이터 관리',
         // backgroundColor: BLUE,
-        iconType: 'AntDesign',
-        icon: 'info',
+        iconType: 'font-awesome',
+        icon: 'save',
         // rightTitle: 'Off',
         // eslint-disable-next-line no-use-before-define
         func: settingNavigate,

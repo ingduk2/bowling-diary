@@ -7,15 +7,7 @@ export default function MemoSettings() {
   const { theme, changeTheme } = React.useContext(MemoThemeContext);
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>MemoSettings</Text>
-      <Text>{theme}</Text>
-      <Button
-        title="Dark Theme"
-        onPress={() => {
-          changeTheme();
-        }}
-      />
-      <Button title="white Theme" onPress={() => Alert.alert('white')} />
+      <Text>생각중입니다...</Text>
     </View>
   );
 }

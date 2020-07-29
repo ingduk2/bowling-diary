@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Alert, Platform, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Platform, AsyncStorage, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,7 +11,6 @@ import { makeRedirectUri, ResponseType, useAuthRequest } from 'expo-auth-session
 import 'firebase/auth';
 import 'firebase/firestore';
 import { FACEBOOK_APPID, GOOGLE_IOS_CLIENT_ID } from '../../key/ApiKey';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 // const { width, height } = Dimensions.get('window');
 
 WebBrowser.maybeCompleteAuthSession();
@@ -25,23 +24,36 @@ const discovery = {
 const useProxy = Platform.select({ web: false, default: true });
 
 export default function Login() {
-  console.log('Login');
   const [isLogin, setIsLogin] = useState(false);
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [provider, setProvider] = useState('');
+  const [loginInfo, setLoginInfo] = useState({});
+
+  console.log('Login');
+  useEffect(() => {
+    console.log('login useEffect');
+    const fetchData = async () => {
+      let loadloginInfo = {};
+      const loadDatas = await AsyncStorage.getItem('LoginInfo');
+      console.log(loadDatas);
+      if (loadDatas !== null) {
+        loadloginInfo = JSON.parse(loadDatas);
+        setLoginInfo(loadloginInfo);
+        setIsLogin(true);
+      }
+    };
+    fetchData();
+  }, []);
 
   const [request, response, promptAsync] = useAuthRequest(
     {
       responseType: ResponseType.Token,
-      clientId: '749205142296622',
+      clientId: FACEBOOK_APPID,
       scopes: ['public_profile', 'email'],
       // For usage in managed apps using the proxy
       redirectUri: makeRedirectUri({
         useProxy,
         // For usage in bare and standalone
         // Use your FBID here. The path MUST be `authorize`.
-        native: 'fb749205142296622://authorize',
+        native: `fb+${FACEBOOK_APPID} +://authorize`,
       }),
       // prompt: Prompt.SelectAccount,
       extraParams: {
@@ -90,9 +102,15 @@ export default function Login() {
             });
           }
           setIsLogin(true);
-          setEmail(result.user.email);
-          setName(result.user.displayName);
-          setProvider(result.additionalUserInfo.providerId);
+          const newLoginInfo = {
+            uid: result.user.uid,
+            name: result.user.displayName,
+            email: result.user.email,
+            provider: result.additionalUserInfo.providerId,
+            isLogin: true,
+          };
+          setLoginInfo(newLoginInfo);
+          AsyncStorage.setItem('LoginInfo', JSON.stringify(newLoginInfo));
         })
         .catch(function (error) {
           // Handle Errors here.
@@ -149,9 +167,14 @@ export default function Login() {
             });
           }
           setIsLogin(true);
-          setEmail(result.user.email);
-          setName(result.user.displayName);
-          setProvider(result.additionalUserInfo.providerId);
+          const newLoginInfo = {
+            uid: result.user.uid,
+            name: result.user.displayName,
+            email: result.user.email,
+            provider: result.additionalUserInfo.providerId,
+            isLogin: true,
+          };
+          AsyncStorage.setItem('LoginInfo', JSON.stringify(newLoginInfo));
         })
         .catch(function (error) {
           // Handle Errors here.
@@ -214,6 +237,7 @@ export default function Login() {
         // Sign-out successful.
         console.log('logout success');
         setIsLogin(false);
+        AsyncStorage.setItem('LoginInfo', JSON.stringify({}));
       })
       .catch((error) => {
         // An error happened.
@@ -254,9 +278,9 @@ export default function Login() {
         )}
         {isLogin && (
           <View>
-            <Text style={styles.logOutText}>{email}</Text>
-            <Text style={styles.logOutText}>{name}</Text>
-            <Text style={styles.logOutText}>{provider} 로그인중</Text>
+            <Text style={styles.logOutText}>{loginInfo.email}</Text>
+            <Text style={styles.logOutText}>{loginInfo.name}</Text>
+            <Text style={styles.logOutText}>{loginInfo.provider} 로그인중</Text>
             <TouchableOpacity onPress={logOut}>
               <Text style={styles.logOutText}>LogOut</Text>
             </TouchableOpacity>
