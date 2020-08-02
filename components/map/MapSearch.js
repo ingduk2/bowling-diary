@@ -14,7 +14,7 @@ import { KAKAO_APP_KEY } from '../../key/ApiKey';
 const { width, height } = Dimensions.get('window');
 
 export default function MapSearch(props) {
-  const { modalVisible, setModalVisible, savePlaceInfo } = props;
+  const { searchModalVisible, setSearchModalVisible, savePlaceInfo, changeModal } = props;
 
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -55,13 +55,18 @@ export default function MapSearch(props) {
       setSearchArray(dataArray);
     });
   };
-  // console.log(searchArray);
+
+  function closeModal() {
+    changeModal();
+    setSearchModalVisible(!searchModalVisible);
+  }
+  // console.log(searchModalVisible);
   return (
     <View>
       <Modal
         animationType="slide"
         transparent
-        visible={modalVisible}
+        visible={searchModalVisible}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
         }}
@@ -76,7 +81,7 @@ export default function MapSearch(props) {
                 size={24}
                 color="black"
                 onPress={() => {
-                  setModalVisible(!modalVisible);
+                  closeModal();
                 }}
               />
             </View>
@@ -84,8 +89,15 @@ export default function MapSearch(props) {
               platform="ios"
               placeholder="Search"
               onChangeText={(text) => {
-                searchPlace(text);
+                console.log(text);
+                if (text === '') setSearchArray([]);
+                if (text.includes('볼링')) searchPlace(text);
                 setSearch(text);
+              }}
+              onClear={() => {
+                console.log('onClear');
+                setSearch('');
+                setSearchArray([]);
               }}
               value={search}
             />
@@ -98,8 +110,9 @@ export default function MapSearch(props) {
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...data}
                     savePlaceInfo={savePlaceInfo}
-                    modalVisible={modalVisible}
-                    setModalVisible={setModalVisible}
+                    searchModalVisible={searchModalVisible}
+                    setSearchModalVisible={setSearchModalVisible}
+                    closeModal={closeModal}
                   />
                 );
               })}
@@ -112,24 +125,16 @@ export default function MapSearch(props) {
 }
 
 function SearchList(props) {
-  const {
-    id,
-    distance,
-    road_address_name,
-    place_name,
-    savePlaceInfo,
-    modalVisible,
-    setModalVisible,
-  } = props;
+  const { id, distance, road_address_name, place_name, savePlaceInfo, closeModal } = props;
   return (
     <TouchableOpacity
       onPress={() => {
         const info = {
-          id,
+          placeId: id,
           name: place_name,
         };
         savePlaceInfo(info);
-        setModalVisible(!modalVisible);
+        closeModal();
       }}
     >
       <View style={styles.container}>
@@ -150,15 +155,15 @@ SearchList.propTypes = {
   distance: PropTypes.string.isRequired,
   road_address_name: PropTypes.string.isRequired,
   place_name: PropTypes.string.isRequired,
-  modalVisible: PropTypes.bool.isRequired,
-  setModalVisible: PropTypes.func.isRequired,
   savePlaceInfo: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
 };
 
 MapSearch.propTypes = {
-  modalVisible: PropTypes.bool.isRequired,
-  setModalVisible: PropTypes.func.isRequired,
+  searchModalVisible: PropTypes.bool.isRequired,
+  setSearchModalVisible: PropTypes.func.isRequired,
   savePlaceInfo: PropTypes.func.isRequired,
+  changeModal: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

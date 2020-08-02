@@ -70,6 +70,11 @@ const StatsThemeProvider = ({ children }) => {
         enable: true,
         name: '일 차트 On Off',
       },
+      {
+        id: 5,
+        enable: true,
+        name: '장소별 통계',
+      },
     ],
   };
 
@@ -78,6 +83,7 @@ const StatsThemeProvider = ({ children }) => {
     const fetchData = async () => {
       const loadDatas = await loadStatsThemeDatas();
       console.log('loadDatas', loadDatas);
+
       const loadState = {
         ...initialState,
         array: loadDatas ? loadDatas.array : initialState.array,

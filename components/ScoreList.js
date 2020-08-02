@@ -15,14 +15,12 @@ export default function ScoreList(props) {
     date,
     score,
     place,
+    placeId,
     condition,
-    setId,
-    setScore,
-    setPlace,
-    setCondition,
     modalVisible,
     setModalVisible,
     setModalState,
+    setUpdateModalData,
   } = props;
 
   return (
@@ -33,33 +31,44 @@ export default function ScoreList(props) {
           {/* <Text style={styles.text}>
             [{place}] {score} 점 ({condition})
           </Text> */}
-          <MaterialIcons
-            name="place"
-            size={30}
-            // color="yellow"
-            style={{ color: '#c3ebff' }}
-          />
-          <Text style={styles.text}>{place}</Text>
-          <FontAwesome5 name="bowling-ball" size={24} color="#c3ebff" />
-          <Text style={styles.text}>{score}점</Text>
-
-          <FontAwesome name="heartbeat" size={24} color="#c3ebff" />
-          <Text style={styles.text}>{condition}</Text>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <MaterialIcons
+                name="place"
+                size={24}
+                // color="yellow"
+                style={{ color: '#c3ebff' }}
+              />
+              <Text style={styles.text}>{place}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <FontAwesome5 name="bowling-ball" size={20} color="#c3ebff" />
+              <Text style={styles.text}>{score}점</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <FontAwesome name="heartbeat" size={24} color="#c3ebff" />
+            <Text style={styles.conditionText}>{condition}</Text>
+          </View>
         </View>
 
         <View style={styles.actions}>
           <TouchableOpacity
             onPressOut={() => {
               setModalState('update');
-              setId(id);
-              setScore(score);
-              setPlace(place);
-              setCondition(condition);
+              const updateData = {
+                id,
+                score,
+                place,
+                placeId,
+                condition,
+              };
+              console.log('ScoreList', updateData);
+              setUpdateModalData(updateData);
               setModalVisible(!modalVisible);
             }}
           >
             <View style={styles.actionContainer}>
-              {/* <Text style={styles.actionText}>✏️</Text> */}
               <Entypo name="pencil" size={24} color="black" />
             </View>
           </TouchableOpacity>
@@ -70,7 +79,6 @@ export default function ScoreList(props) {
             }}
           >
             <View style={styles.actionContainer}>
-              {/* <Text style={styles.actionText}>❌</Text> */}
               <Feather name="trash-2" size={24} color="black" />
             </View>
           </TouchableOpacity>
@@ -81,20 +89,17 @@ export default function ScoreList(props) {
 }
 
 ScoreList.propTypes = {
-  setId: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   deleteScoreData: PropTypes.func.isRequired,
-  // updateScoreData: PropTypes.func.isRequired,
   score: PropTypes.string.isRequired,
   place: PropTypes.string.isRequired,
+  placeId: PropTypes.string.isRequired,
   condition: PropTypes.number.isRequired,
-  setScore: PropTypes.func.isRequired,
-  setPlace: PropTypes.func.isRequired,
-  setCondition: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   modalVisible: PropTypes.bool.isRequired,
   setModalVisible: PropTypes.func.isRequired,
   setModalState: PropTypes.func.isRequired,
+  setUpdateModalData: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -110,9 +115,9 @@ const styles = StyleSheet.create({
     width,
     borderBottomColor: '#bbb',
     borderBottomWidth: StyleSheet.hairlineWidth,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // justifyContent: 'space-between',
   },
   circle: {
     width: 30,
@@ -128,26 +133,28 @@ const styles = StyleSheet.create({
     borderColor: '#F23657',
   },
   text: {
-    width: width / 6,
+    width: width / 2.3,
+    fontWeight: '500',
+    fontSize: 15,
+    // marginVertical: 15,
+    // paddingRight: 20,
+    // width: width / 2 + 40,
+  },
+  conditionText: {
+    width: '4%',
     fontWeight: '500',
     fontSize: 15,
     marginVertical: 15,
     paddingRight: 20,
-    // width: width / 2 + 40,
-  },
-  completedText: {
-    color: '#bbb',
-    textDecorationLine: 'line-through',
-  },
-  uncompletedText: {
-    color: '#353839',
+    // backgroundColor: 'yellow',
   },
   column: {
-    // backgroundColor : "#bbb",
+    // backgroundColor: '#bbb',
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    width,
+    // width: width / 2,
+    flex: 1,
   },
   actions: {
     flexDirection: 'row',
@@ -155,67 +162,6 @@ const styles = StyleSheet.create({
   actionContainer: {
     marginVertical: 10,
     marginHorizontal: 10,
-  },
-
-  modalInputScore: {
-    width: width / 4.5,
-    borderColor: 'black',
-    padding: 2,
-    margin: 10,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: 1,
-    fontSize: 25,
-    // alignItems : 'center',
-    textAlign: 'center',
-    // justifyContent: 'center'
-  },
-
-  modalInputPlace: {
-    width: width / 1.8,
-    borderColor: 'black',
-    padding: 2,
-    margin: 10,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: 1,
-    fontSize: 25,
-    // alignItems: 'center',
-    textAlign: 'center',
-    // justifyContent: 'center'
-  },
-
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  openButton: {
-    backgroundColor: '#F194FF',
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    textAlign: 'center',
+    // backgroundColor: 'blue',
   },
 });

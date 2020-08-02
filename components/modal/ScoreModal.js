@@ -9,10 +9,12 @@ import {
   Alert,
   Modal,
   TouchableHighlight,
+  Button,
 } from 'react-native';
 import { FontAwesome5, AntDesign, MaterialIcons, Entypo, FontAwesome } from '@expo/vector-icons';
-import { Rating, AirbnbRating } from 'react-native-elements';
+import { Rating } from 'react-native-elements';
 import PropTypes from 'prop-types';
+import MapSearch from '../map/MapSearch';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,33 +23,58 @@ export default function ScoreModal(props) {
     id,
     score,
     place,
+    placeId,
     condition,
     modalVisible,
     setModalVisible,
-    setScore,
-    setPlace,
-    setCondition,
     addScoreData,
     updateScoreData,
     modalState,
   } = props;
   const [modalScore, setModalScore] = useState(score);
   const [modalPlace, setModalPlace] = useState(place);
+  const [modalPlaceId, setModalPlaceId] = useState(placeId);
   const [modalCondition, setModalCondition] = useState(condition);
+  const [searchModalVisible, setSearchModalVisible] = useState(false);
+
   useEffect(() => {
+    console.log('useEffect score', props.score);
     setModalScore(props.score);
   }, [props]);
 
   useEffect(() => {
+    console.log('useEffect place', props.place);
     setModalPlace(props.place);
   }, [props]);
 
   useEffect(() => {
+    console.log('useEffect placeId', props.placeId);
+    setModalPlaceId(props.place);
+  }, [props]);
+
+  useEffect(() => {
+    console.log('useEffect condition', props.condition);
     setModalCondition(props.condition);
   }, [props]);
 
+  function changeModal() {
+    setModalVisible(!modalVisible);
+  }
+
+  function savePlaceInfo(info) {
+    console.log('searchPlace', info);
+    setModalPlace(info.name);
+    setModalPlaceId(info.placeId);
+  }
   return (
     <View>
+      <MapSearch
+        searchModalVisible={searchModalVisible}
+        setSearchModalVisible={setSearchModalVisible}
+        savePlaceInfo={savePlaceInfo}
+        changeModal={changeModal}
+      />
+
       <Modal
         animationType="slide"
         transparent
@@ -82,7 +109,6 @@ export default function ScoreModal(props) {
                       returnScore = '300';
                     }
                     setModalScore(returnScore);
-                    setScore(returnScore);
                   }}
                 />
                 {/* <MaterialIcons name="place" size={35} color="black" onPress={() => {}} /> */}
@@ -101,7 +127,14 @@ export default function ScoreModal(props) {
                   underlineColorAndroid="transparent"
                   onChangeText={(text) => {
                     setModalPlace(text);
-                    setPlace(text);
+                  }}
+                />
+                <Button
+                  title="search"
+                  onPress={() => {
+                    // setPlace('');
+                    setSearchModalVisible(!searchModalVisible);
+                    setModalVisible(!modalVisible);
                   }}
                 />
               </View>
@@ -118,7 +151,6 @@ export default function ScoreModal(props) {
                   }}
                   onFinishRating={(rating) => {
                     setModalCondition(rating);
-                    setCondition(rating);
                   }}
                 />
               </View>
@@ -142,9 +174,23 @@ export default function ScoreModal(props) {
                 }}
                 onPress={() => {
                   if (modalState === 'add') {
-                    addScoreData();
+                    const addData = {
+                      score: modalScore,
+                      place: modalPlace,
+                      condition: modalCondition,
+                      placeId: modalPlaceId,
+                    };
+                    addScoreData(addData);
                   } else if (modalState === 'update') {
-                    updateScoreData(id, modalScore, modalPlace, modalCondition);
+                    console.log(
+                      'ScoreModal',
+                      id,
+                      modalScore,
+                      modalPlace,
+                      modalPlaceId,
+                      modalCondition,
+                    );
+                    updateScoreData(id, modalScore, modalPlace, modalPlaceId, modalCondition);
                     setModalVisible(!modalVisible);
                   }
                 }}
@@ -163,14 +209,12 @@ ScoreModal.propTypes = {
   id: PropTypes.string.isRequired,
   score: PropTypes.string.isRequired,
   place: PropTypes.string.isRequired,
+  placeId: PropTypes.string.isRequired,
   condition: PropTypes.number.isRequired,
   modalVisible: PropTypes.bool.isRequired,
   addScoreData: PropTypes.func.isRequired,
   updateScoreData: PropTypes.func.isRequired,
   setModalVisible: PropTypes.func.isRequired,
-  setScore: PropTypes.func.isRequired,
-  setPlace: PropTypes.func.isRequired,
-  setCondition: PropTypes.func.isRequired,
   modalState: PropTypes.string.isRequired,
 };
 

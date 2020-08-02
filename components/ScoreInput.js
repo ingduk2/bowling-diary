@@ -11,36 +11,40 @@ import MapSearch from './map/MapSearch';
 const { width } = Dimensions.get('window');
 
 export default function ScoreInput(props) {
-  const { saveScore, addScoreData, savePlace, saveCondition, calandarEnable } = props;
+  const { addScoreData, calandarEnable } = props;
   const [score, setScore] = useState('');
   const [place, setPlace] = useState('');
   const [condition, setCondition] = useState(5);
+  const [placeId, setPlaceId] = useState('0');
   const { homeThemes } = useContext(HomeThemeContext);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [searchModalVisible, setSearchModalVisible] = useState(false);
 
   const ratingCompleted = (rating) => {
     console.log(rating);
     setCondition(rating);
-    saveCondition(rating);
   };
 
   const savePlaceInfo = (info) => {
     console.log('scoreInput', info);
     setPlace(info.name);
+    setPlaceId(info.placeId);
   };
+
+  function changeModal() {}
   // if (homeThemes == null) homeThemes = null;
-  console.log('ScoreInput', homeThemes);
+  // console.log('ScoreInput', homeThemes);
   return homeThemes ? (
     <View style={styles.container}>
       <MapSearch
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
+        searchModalVisible={searchModalVisible}
+        setSearchModalVisible={setSearchModalVisible}
         savePlaceInfo={savePlaceInfo}
+        changeModal={changeModal}
       />
       {(!calandarEnable || homeThemes.scoreInput.enable === true) && (
         <View style={{ flexDirection: 'row' }}>
-          <FontAwesome5 name="bowling-ball" size={35} />
+          <FontAwesome5 name="bowling-ball" size={33} />
           {/* <MyCalendar/> */}
           <TextInput
             // value={score == "-" ? null : score}
@@ -60,7 +64,6 @@ export default function ScoreInput(props) {
                 console.log('300!!!!');
                 returnScore = '300';
               }
-              saveScore(returnScore);
               setScore(returnScore);
             }}
           />
@@ -71,7 +74,13 @@ export default function ScoreInput(props) {
             color="black"
             onPress={() => {
               setScore('');
-              addScoreData();
+              const addData = {
+                score,
+                place,
+                condition,
+                placeId,
+              };
+              addScoreData(addData);
             }}
           />
           {/* <MaterialIcons name="place" size={35} color="black" onPress={() => {}} /> */}
@@ -79,8 +88,8 @@ export default function ScoreInput(props) {
         </View>
       )}
       {(!calandarEnable || homeThemes.placeInput.enable === true) === true && (
-        <View style={{ flexDirection: 'row', paddingRight: 35 }}>
-          <MaterialIcons name="place" size={35} color="black" />
+        <View style={{ flexDirection: 'row', paddingLeft: 45 }}>
+          <MaterialIcons name="place" size={38} color="black" />
           <TextInput
             value={place}
             style={[styles.input, styles.inputSizePlace]}
@@ -91,7 +100,7 @@ export default function ScoreInput(props) {
             maxLength={10}
             underlineColorAndroid="transparent"
             onChangeText={(text) => {
-              savePlace(text);
+              setPlaceId('0');
               setPlace(text);
             }}
           />
@@ -99,14 +108,14 @@ export default function ScoreInput(props) {
             title="search"
             onPress={() => {
               setPlace('');
-              setModalVisible(!modalVisible);
+              setSearchModalVisible(!searchModalVisible);
             }}
           />
         </View>
       )}
       {(!calandarEnable || homeThemes.conditionInput.enable === true) === true && (
         <View style={{ flexDirection: 'row', paddingRight: 35, alignItems: 'center' }}>
-          <FontAwesome name="heartbeat" size={35} color="black" />
+          <FontAwesome name="heartbeat" size={28} color="black" />
           <Rating
             type="heart"
             ratingCount={5}
@@ -125,10 +134,7 @@ export default function ScoreInput(props) {
 }
 
 ScoreInput.propTypes = {
-  saveScore: PropTypes.func.isRequired,
   addScoreData: PropTypes.func.isRequired,
-  savePlace: PropTypes.func.isRequired,
-  saveCondition: PropTypes.func.isRequired,
   calandarEnable: PropTypes.bool.isRequired,
 };
 

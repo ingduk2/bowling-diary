@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Chart from './chart';
 import EntireTable from './entireTable';
 import RecentTable from './recentTable';
+import PlaceTable from './placeTable';
 import ChartDay from './chartDay';
 import ChartMonth from './chartMonth';
 import StatsThemeContext from '../../context/StatsThemeContext';
@@ -17,6 +18,7 @@ export default function Stats(props) {
 
   return (
     <View>
+      {array[5].enable === true && <PlaceTable datas={datas} />}
       {array[0].enable === true && <EntireTable datas={datas} />}
       {array[1].enable === true && <RecentTable datas={datas} />}
       {array[2].enable === true && <Chart datas={datas} />}

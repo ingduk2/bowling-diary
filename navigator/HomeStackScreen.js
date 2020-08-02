@@ -128,78 +128,58 @@ function HomeScreen() {
 
   const [datas, setData] = useState({});
   // const [datas, setData] = useScoreData();
-  const [_score, setScore] = useState('');
   const [_date, setDate] = useState(nowDate);
   console.log('HomeScreen', _date);
-  const [_place, setPlace] = useState('');
-  const [_condition, setCondition] = useState(5);
   const { homeThemes } = useContext(HomeThemeContext);
   const [calandarEnable, setCalandarEnable] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalState, setModalState] = useState('add');
-  const [_id, setId] = useState('');
+  const [updateModalData, setUpdateModalData] = useState({});
+
   useEffect(() => {
     console.log('ScoreLoads.useEffect');
     const fetchData = async () => {
       const loadDatas = await loadScoreDatas();
-      // console.log(loadDatas);
+      console.log(loadDatas);
       setData(loadDatas);
     };
     fetchData();
   }, []);
-
-  const Save = () => {
-    const ID = uuidv1({
-      random: seed(),
-    });
-    console.log('Save', _score, _date, ID);
-    const newDataObject = {
-      [ID]: {
-        id: ID,
-        score: _score,
-        date: _date,
-        place: _place,
-        condition: _condition,
-        createdAt: Date.now(),
-      },
-    };
-
-    // console.log(newDataObject);
-    return newDataObject;
-  };
-
-  const saveScore = (score) => {
-    setScore(score);
-  };
-
-  const savePlace = (place) => {
-    setPlace(place);
-  };
-
-  const saveCondition = (condition) => {
-    setCondition(condition);
-  };
 
   const saveDate = (date) => {
     setDate(date);
     console.log(date);
   };
 
-  const addScoreData = () => {
+  const addScoreData = (addData) => {
+    const { score, place, condition, placeId } = addData;
     // score
-    console.log('_addScoreData', _score, _date, _place, _condition);
-    if (_score == null || _score === '' || _date == null) {
-      Alert.alert('점수나 날짜를 확인해주세요');
+    console.log('_addScoreData', score, _date, place, condition, placeId);
+    if (score == null || score === '' || _date == null || place === '' || place === undefined) {
+      Alert.alert('점수, 날짜, 장소를 확인해주세요');
       return;
     }
 
-    const newData = Save();
+    const ID = uuidv1({
+      random: seed(),
+    });
+
+    const newData = {
+      [ID]: {
+        id: ID,
+        score,
+        date: _date,
+        place,
+        placeId,
+        condition,
+        createdAt: Date.now(),
+      },
+    };
     const newDatas = {
       ...datas,
       ...newData,
     };
 
-    setScore('');
     // set_Date("")
     saveScoreData(newDatas);
     setData(newDatas);
@@ -215,7 +195,8 @@ function HomeScreen() {
     setData(newDatas);
   };
 
-  const updateScoreData = (id, score, place, condition) => {
+  const updateScoreData = (id, score, place, placeId, condition) => {
+    console.log('updateScoreData', id, score, place, placeId, condition);
     const newDatas = {
       ...datas,
 
@@ -223,6 +204,7 @@ function HomeScreen() {
         ...datas[id],
         score,
         place,
+        placeId,
         condition,
       },
     };
@@ -234,6 +216,8 @@ function HomeScreen() {
     AsyncStorage.setItem('scoreDatas', JSON.stringify(newdatas));
   };
 
+  console.log('updateModalData', updateModalData);
+
   return (
     <View
       style={{
@@ -243,15 +227,10 @@ function HomeScreen() {
       }}
     >
       <ScoreModal
-        id={_id}
-        score={_score}
-        place={_place}
-        condition={_condition}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...updateModalData}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        setScore={setScore}
-        setPlace={setPlace}
-        setCondition={setCondition}
         addScoreData={addScoreData}
         updateScoreData={updateScoreData}
         modalState={modalState}
@@ -263,13 +242,7 @@ function HomeScreen() {
           </ScrollView>
         )}
 
-        <ScoreInput
-          saveScore={saveScore}
-          addScoreData={addScoreData}
-          savePlace={savePlace}
-          saveCondition={saveCondition}
-          calandarEnable={calandarEnable}
-        />
+        <ScoreInput addScoreData={addScoreData} calandarEnable={calandarEnable} />
       </View>
       <Text
         style={{
@@ -297,18 +270,15 @@ function HomeScreen() {
             )
             .map((data) => {
               if (data.date === _date) {
+                // console.log('loop', data);
                 return (
                   <ScoreList
                     key={data.id}
-                    setScore={setScore}
-                    setPlace={setPlace}
-                    setId={setId}
-                    setCondition={setCondition}
                     deleteScoreData={deleteScoreData}
-                    updateScoreData={updateScoreData}
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
                     setModalState={setModalState}
+                    setUpdateModalData={setUpdateModalData}
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...data}
                   />
@@ -326,15 +296,15 @@ function HomeScreen() {
         // overrideWithAction={false}
         animated={false}
         onPressMain={() => {
-          setScore('');
-          setPlace('');
-          setCondition(5);
+          // 초기화 줘야함..
+          setUpdateModalData({});
           setModalState('add');
           console.log('onPress');
           // if (homeThemes !== undefined) {
           if (!homeThemes.popupInput.enable) {
             setCalandarEnable(!calandarEnable);
           } else {
+            setCalandarEnable(!calandarEnable);
             setModalVisible(!modalVisible);
           }
           // }
