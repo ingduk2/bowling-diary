@@ -1,2 +1,24 @@
 # bowling diary
-beginner react native bowling diary
+
+- Expo 버전 업그레이드 후 build가 안되는 상황..
+
+## 볼링 다이어리
+
+- Skill : reactNative, Expo, Firebase
+
+## 기능
+
+- 점수입력 탭
+  - 캘린더로 점수 입력, 수정, 삭제
+- 통계 탭 (차트)
+  - 전체 점수
+  - 최근 점수
+  - 년, 월, 일별 점수
+  - 장소별
+- 메모 탭
+  - 메모장 기능
+  - 검색 기능
+- 설정 탭
+  - 로그인
+  - 항목별 설정
+  - 데이터 저장 및 불러오기 기능
